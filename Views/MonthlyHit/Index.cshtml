@@ -1,0 +1,483 @@
+﻿@{
+    ViewBag.Title = "本月主打管理";
+    ViewBag.icon = "fa fa-pencil-square";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Tables/Data/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+@Styles.Render("~/AdminLTE/plugins/daterangepicker/css")
+@if (Html.getBrand(User.Identity.Name) == "NISSAN")
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #B72E2E;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #557DB8;
+        }
+    </style>
+}
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OKCreate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>新增成功!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "OKUpdate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>更新成功!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "OKDelete")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>刪除成功!!。</strong>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="row" style="padding-top:40px">
+    <div class="row" style="margin-left:10px;">
+        <div class="col-xs-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">車架上架</span>
+                    <span class="info-box-number" id="carOnShelves"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row" style="padding: 0 20px 0 20px">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>時間區間</label>
+                <input type="text" class="form-control pull-right" id="reservation">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>經銷商</label>
+                <select class="form-control" id="dealer">
+                    <option value="">不限</option>
+                    @foreach (var item in (List<string>)TempData["dealerOptions"])
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>中古車營業據點</label>
+                <select class="form-control" id="stronghold">
+                    <option value="">不限</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>狀態</label>
+                <select class="form-control" id="status">
+                    <option value="">不限</option>
+                    <option value="草稿">草稿</option>
+                    <option value="上架">上架</option>
+                    <option value="成交上架">成交上架</option>
+                    <option value="上架申請">上架申請</option>
+                    <option value="非成交下架">非成交下架</option>
+                    <option value="成交下架申請">成交下架申請</option>
+                    <option value="非成交下架申請">非成交下架申請</option>
+                    <option value="成交下架">成交下架</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="col-xs-12 " style="text-align:right">
+        <div class="box-body">
+            <button class="btn btn-primary" onclick="filterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>資料篩選</button>
+            <button class="btn btn-primary" onclick="resetFilterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>重設篩選</button>
+            @if (TempData["CreateRight"].ToString() == "True")
+            {
+                <a class="btn btn-primary" href="@Url.Action("Create", "MonthlyHit")" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>新增主打車輛</a>
+            }
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="">
+            <div class="box-body">
+                <table id="hitTable" class="table table-bordered table-striped" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>排序</th>
+                            <th>編號</th>
+                            <th>經銷商</th>
+                            <th>中古車<br />營業據點</th>
+                            <th>車種</th>
+                            <th>車型</th>
+                            <th>出廠年月</th>
+                            <th>售價</th>
+                            <th>狀態</th>
+                            <th>最後更新</th>
+                            <th>圖框使用</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    <script>
+        let updateRight = '@TempData["UpdateRight"].ToString()';
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "本月主打 Top 20") {
+                navItem.addClass('active');
+            }
+        });
+
+        $(document).ready(function () {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            var status = $('#status').find(":selected").val();
+            $('#hitTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetShopData", "MonthlyHit")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val()}
+            },
+            "columnDefs": [{
+                "targets": [11],
+                "sortable": true
+            }],
+            "columns": [
+                { "data": "hitOrder", "name": "排序", "autoWidth": true },
+                { "data": "ShopNo", "name": "編號", "autoWidth": true },
+                { "data": "dealer", "name": "經銷商", "autoWidth": true },
+                { "data": "stronghold", "name": "中古車營業據點", "autoWidth": true },
+                { "data": "carType", "name": "車種", "autoWidth": true },
+                { "data": "carModel", "name": "車型", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "出廠年月", "autoWidth": true },
+                { "data": "price", "name": "出售價", "autoWidth": true },
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "updateTime", "name": "最後更新", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "isFrame", "name": "圖框使用", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="MonthlyHit/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> '}
+                },
+            ]
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "MonthlyHit")',
+                data: { Keyword: $('#search').val(), dateFilter: $('#reservation').val(), dealerFilter: dealer, strongholdFilter: stronghold, status: status },
+                success: function (data) {
+                    console.log(data);
+                    $("#carOnShelves").text(data.carOnShelves);
+                    $("#carSell").text(data.carSell);
+                }
+            })
+
+            //$('#shopTable_filter').hide();
+
+            oTable = $('#hitTable').DataTable();
+            $('#search').bind("keyup blur", function () {
+                //alert($('#search').val());
+                $('#hitTable').DataTable().destroy();
+                $('#hitTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetShopData", "MonthlyHit")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": stronghold, "status": status }
+            },
+            "columnDefs": [{
+                "targets": [11],
+                "sortable": true
+            }],
+            "columns": [
+                { "data": "hitOrder", "name": "排序", "autoWidth": true },
+                { "data": "ShopNo", "name": "編號", "autoWidth": true },
+                { "data": "dealer", "name": "經銷商", "autoWidth": true },
+                { "data": "stronghold", "name": "中古車營業據點", "autoWidth": true },
+                { "data": "carType", "name": "車種", "autoWidth": true },
+                { "data": "carModel", "name": "車型", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "出廠年月", "autoWidth": true },
+                { "data": "price", "name": "出售價", "autoWidth": true },
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "updateTime", "name": "最後更新", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "isFrame", "name": "圖框使用", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="MonthlyHit/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> ' }
+                },
+            ]
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "MonthlyHit")',
+                data: { Keyword: $('#search').val(), dateFilter: $('#reservation').val(), dealerFilter: dealer, strongholdFilter: stronghold, status: status },
+                success: function (data) {
+                    console.log(data);
+                    $("#carOnShelves").text(data.carOnShelves);
+                    $("#carSell").text(data.carSell);
+                }
+            })
+
+            })
+        })
+        $(function () {
+
+            //Date range picker
+            $('#reservation').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+        });
+
+
+
+        $('#dealer').bind("keyup blur change", function () {
+            var dealer = this.value;
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStronghold", "CarMgt")',
+                data: { dealer: dealer },
+                success: function (data) {
+                    console.log(data);
+                    $('#stronghold').empty();
+
+                    $('#stronghold').append("<option value=''>不限</option>")
+                    $.each(data, function (index, item) {
+                        $('#stronghold').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+
+    function resetFilterData() {
+        $('#reservation').val('');
+        $('#search').val('');
+        $("#dealer").val("").change();
+        $("#stronghold").empty();
+        $('#stronghold').append("<option value=''>不限</option>")
+        $("#status").val("").change();
+
+        filterData();
+    }
+
+    function filterData() {
+            var stronghold = this.value;
+            var dealer = $('#dealer').find(":selected").val();
+            var status = $('#status').find(":selected").val();
+            $('#hitTable').DataTable().destroy();
+            $('#hitTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetShopData", "MonthlyHit")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": stronghold, "status": status}
+            },
+            "columnDefs": [{
+                "targets": [11],
+                "sortable": true
+            }],
+            "columns": [
+                { "data": "hitOrder", "name": "排序", "autoWidth": true },
+                { "data": "ShopNo", "name": "編號", "autoWidth": true },
+                { "data": "dealer", "name": "經銷商", "autoWidth": true },
+                { "data": "stronghold", "name": "中古車營業據點", "autoWidth": true },
+                { "data": "carType", "name": "車種", "autoWidth": true },
+                { "data": "carModel", "name": "車型", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "出廠年月", "autoWidth": true },
+                { "data": "price", "name": "出售價", "autoWidth": true },
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "updateTime", "name": "最後更新", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "isFrame", "name": "圖框使用", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="MonthlyHit/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> ' }
+                },
+            ]
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "MonthlyHit")',
+                data: { Keyword: $('#search').val(), dateFilter: $('#reservation').val(), dealerFilter: dealer, strongholdFilter: '', status: status },
+                success: function (data) {
+                    console.log(data);
+                    $("#carOnShelves").text(data.carOnShelves);
+                    $("#carSell").text(data.carSell);
+                }
+            })
+        }
+
+
+        function ExportCsv() {
+            var status = $('#status').find(":selected").val();
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ExportCSV", "MonthlyHit")',
+                data: { Keyword: $('#search').val(), dateFilter: $('#reservation').val(), dealerFilter: dealer, strongholdFilter: stronghold, status: status },
+                success: function (data) {
+                    window.location.href = "@Url.Action("GetWord", "MonthlyHit")";
+                }
+            })
+        }
+    </script>
+}

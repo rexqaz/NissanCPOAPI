@@ -1,0 +1,314 @@
+﻿@model WebApplication.Models.Shops
+@{
+    ViewBag.Title = "新增本月主打";
+    ViewBag.icon = "fa fa-pencil-square";
+}
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+<style>
+    img {
+        width: 400px;
+        height: auto;
+    }
+</style>
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div>
+    <form method="post" action="@Url.Action("CreateInProgress", "MonthlyHit")" enctype="multipart/form-data" onsubmit="return confirm('是否確定新增?');">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-6 control-label" style="font-size:large">選擇經銷商及中古車營業據點</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="dealer" id="dealer">
+                                <option value="">==請選擇==</option>
+                                @foreach (var item in (List<string>)TempData["dealerOptions"])
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">中古車營業據點<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="stronghold" id="stronghold">
+                                <option value="">請選擇</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top:1px solid black" />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">選擇車輛</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車型<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="carModel" id="carModel">
+                                <option value="">請選擇</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:30px">
+                        <div class="form-group has-feedback">
+                            <label for="inputEmail3" class="col-sm-3 control-label">出廠年月<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="form-control pull-right" name="yearOfManufacture" id="yearOfManufacture">
+                                    <option value="">請選擇</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">里程數<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="milage" id="milage">
+                                <option value="">請選擇</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">編號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="shopNo" id="shopNo">
+                                <option value="">請選擇</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top:1px solid black" />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">排序及圖框</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">排序<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="hitOrder">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">圖框<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="isFrame">
+                                <option value="有">有</option>
+                                <option value="無">無</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" class="btn btn-success" style="padding-left:17px" value="新增" name="action" />
+            @*<input type="submit" class="btn btn-primary" style="padding-left:17px" value="上架申請" name="action" />*@
+        </div>
+
+    </form>
+
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+
+    <script>
+        let addPicCount = 5;
+
+
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "本月主打 Top 20") {
+                navItem.addClass('active');
+            }
+        });
+
+        function optionClear(target) {
+            $(target).empty();
+            $(target).append("<option value=''>請選擇</option>");
+        }
+        $('#dealer').on('change', function () {
+            var dealer = this.value;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStronghold", "CarMgt")',
+                data: { dealer: dealer },
+                success: function (data) {
+                    optionClear('#stronghold');
+                    optionClear('#carModel');
+                    optionClear('#yearOfManufacture');
+                    optionClear('#milage');
+                    optionClear('#shopNo');
+                    $.each(data, function (index, item) {
+                        $('#stronghold').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+
+        $('#stronghold').on('change', function () {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCarModel", "MonthlyHit")',
+                data: { dealer: dealer, stronghold: stronghold, getOnline: true},
+                success: function (data) {
+                    optionClear('#carModel');
+                    optionClear('#yearOfManufacture');
+                    optionClear('#milage');
+                    optionClear('#shopNo');
+                    $.each(data, function (index, item) {
+                        $('#carModel').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+
+        $('#carModel').on('change', function () {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            var carModel = $('#carModel').find(":selected").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetYearOfManufacture", "MonthlyHit")',
+                data: { dealer: dealer, stronghold: stronghold, carModel: carModel, getOnline: true},
+                success: function (data) {
+                    optionClear('#yearOfManufacture');
+                    optionClear('#milage');
+                    optionClear('#shopNo');
+                    $.each(data, function (index, item) {
+                        $('#yearOfManufacture').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+
+        $('#yearOfManufacture').on('change', function () {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            var carModel = $('#carModel').find(":selected").val();
+            var yearOfManufacture = $('#yearOfManufacture').find(":selected").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetMilage", "MonthlyHit")',
+                data: { dealer: dealer, stronghold: stronghold, carModel: carModel, yearOfManufacture: yearOfManufacture, getOnline: true},
+                success: function (data) {
+                    optionClear('#milage');
+                    optionClear('#shopNo');
+
+                    $.each(data, function (index, item) {
+                        $('#milage').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+
+        $('#milage').on('change', function () {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            var carModel = $('#carModel').find(":selected").val();
+            var yearOfManufacture = $('#yearOfManufacture').find(":selected").val();
+            var milage = $('#milage').find(":selected").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetShopNo", "MonthlyHit")',
+                data: { dealer: dealer, stronghold: stronghold, carModel: carModel, yearOfManufacture: yearOfManufacture, milage: milage, getOnline: true},
+                success: function (data) {
+                    optionClear('#shopNo');
+                    $.each(data, function (index, item) {
+                        $('#shopNo').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        });
+    </script>
+}

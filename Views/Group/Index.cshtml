@@ -1,0 +1,302 @@
+﻿
+@{
+    ViewBag.Title = "群組管理";
+    ViewBag.icon = "fa fa-file-text";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Tables/Data/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+@Styles.Render("~/AdminLTE/plugins/daterangepicker/css")
+@if (Html.getBrand(User.Identity.Name) == "NISSAN")
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #B72E2E;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #557DB8;
+        }
+    </style>
+}
+
+<div class="row" style="margin-left:10px">
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label style="margin-left:20px">時間區間</label>
+            <input type="text" class="form-control pull-right" id="reservation" style="width:250px">
+        </div>
+    </div>
+
+</div>
+
+<br />
+<div class="row">
+    <div class="col-xs-12 " style="text-align:right">
+        <div class="box-body">
+            <button class="btn btn-primary" onclick="filterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>資料篩選</button>
+            <button class="btn btn-primary" onclick="resetFilterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>重設篩選</button>
+            @if (TempData["CreateRight"].ToString() == "True")
+            {
+                <a class="btn btn-primary" href="@Url.Action("Create", "Group")" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>新增群組</a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row" style="padding-top:40px">
+    
+    <div class="col-xs-12">
+        <div class="">
+            @*<div class="box-header">
+                    <h3 class="box-title">Data Table With Full Features</h3>
+                </div>*@
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>建立日期</th>
+                            <th>群組名稱</th>
+                            <th>狀態</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+                                <td>@role.createTime.ToString("yyyy/MM/dd")</td>
+                                <td>@role.RoleName</td>
+                                <td>
+                                    @if (role.status)
+                                    {<text>啟用</text>}
+                                else
+                                { <text>停用</text>}
+                                </td>
+                                <td>
+                                    @if (TempData["UpdateRight"].ToString() == "True")
+                                    {
+                                        <a class="btn btn-warning" href="@Url.Action("Update", "Group", new { seq = role.seq })">檢視</a>
+                                        @*<a class="btn btn-danger" href="@Url.Action("Delete", "Group", new { seq = role.seq})" onclick="return confirm('是否確定刪除')">刪除</a>*@
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+
+<script>
+    let updateRight = '@TempData["UpdateRight"].ToString()';
+        $('#search').on('keyup click', function () {
+            $('#example1').DataTable().destroy();
+            $('#example1')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetGroupData", "Group")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val()}
+            },
+            "columnDefs": [{
+                "targets": [3],
+                "sortable": true
+            }],
+            "columns": [
+                {
+                    "data": "createTime", "name": "建立日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "RoleName", "name": "群組名稱", "autoWidth": true },
+                { "data": "Description", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="Group/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> ' }
+                },
+            ]
+            });
+        })
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "後台帳號管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        $('#example1').DataTable({
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+        $(function () {
+            //Date range picker
+            $('#reservation').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+            $('#example1_filter').hide();
+        });
+
+        // Custom filtering function which will search data in column four between two values
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var dateRange = $('#reservation').val();
+                if (dateRange != '') {
+                    let dateArray = dateRange.split(" - ");
+                    let minArray = dateArray[0].split("/");
+                    let maxArray = dateArray[1].split("/");
+                    var date = data[0];
+                    let min = minArray[2] + "/" + minArray[0] + "/" + minArray[1];
+                    let max = maxArray[2] + "/" + maxArray[0] + "/" + maxArray[1];
+                    console.log(date);
+                    console.log(data[0]);
+                    console.log(min);
+                    console.log(max);
+
+                    if (
+                        (min === null && max === null) ||
+                        (min === null && date <= max) ||
+                        (min <= date && max === null) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+        );
+
+        function resetFilterData() {
+            $('#reservation').val('');
+            $('#search').val('');
+
+            filterData();
+        }
+
+        function filterData() {
+            $('#example1').DataTable().destroy();
+            $('#example1')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                order: [[0, 'desc']],
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetGroupData", "Group")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val()}
+            },
+            "columnDefs": [{
+                "targets": [3],
+                "sortable": true
+            }],
+            "columns": [
+                {
+                    "data": "createTime", "name": "建立日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "RoleName", "name": "群組名稱", "autoWidth": true },
+                { "data": "Description", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="Group/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> ' }
+                },
+            ]
+            });
+        }
+</script>
+}

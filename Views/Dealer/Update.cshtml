@@ -1,0 +1,379 @@
+﻿@model WebApplication.Models.DealersViewModel2
+@{
+    ViewBag.Title = "編輯據點";
+    ViewBag.icon = "fa fa-angle-left pull-right";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Forms/Advanced/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/timepicker/css")
+@Styles.Render("~/AdminLTE/plugins/select2/css")
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+@if (TempData["dealerType"].ToString() == "new")
+{
+    <div class="col-xs-8">
+        <div class="">
+            @using (Html.BeginForm("UpdateInProgress", "Dealer", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="" style="padding-bottom:40px">
+                    <input type="hidden" name="seq" value="@Model.seq" />
+                    <label for="inputEmail3" class="col-sm-3 control-label">地區<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-9">
+                        <select name="area">
+                            <option value="">==請選擇地區==</option>
+                            <option value="基隆市" @if (Model.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                            <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                            <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                            <option value="桃園市" @if (Model.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                            <option value="新竹市" @if (Model.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                            <option value="新竹縣" @if (Model.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                            <option value="苗栗縣" @if (Model.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                            <option value="台中市" @if (Model.area == "台中市") { <text> selected</text>}>台中市</option>
+                            <option value="彰化縣" @if (Model.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                            <option value="南投縣" @if (Model.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                            <option value="雲林縣" @if (Model.area == "雲林縣") { <text> selected</text>}>雲林縣</option>
+                            <option value="嘉義市" @if (Model.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                            <option value="嘉義縣" @if (Model.area == "嘉義縣") { <text> selected</text>}>嘉義縣</option>
+                            <option value="台南市" @if (Model.area == "台南市") { <text> selected</text>}>台南市</option>
+                            <option value="高雄市" @if (Model.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                            <option value="屏東縣" @if (Model.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                            <option value="台東縣" @if (Model.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                            <option value="花蓮縣" @if (Model.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                            <option value="宜蘭縣" @if (Model.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="" style="padding-bottom:40px">
+                    <label for="inputEmail3" class="col-sm-3 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-9">
+                        <select name="dealerName">
+                            <option value="">==請選擇經銷商==</option>
+                            <option value="裕信" @if (Model.dealerName == "裕信") { <text> selected</text>}>裕信</option>
+                            <option value="誠隆" @if (Model.dealerName == "誠隆") { <text> selected</text>}>誠隆</option>
+                            <option value="元隆" @if (Model.dealerName == "元隆") { <text> selected</text>}>元隆</option>
+                            <option value="裕新" @if (Model.dealerName == "裕新") { <text> selected</text>}>裕新</option>
+                            <option value="裕唐" @if (Model.dealerName == "裕唐") { <text> selected</text>}>裕唐</option>
+                            <option value="匯聯" @if (Model.dealerName == "匯聯") { <text> selected</text>}>匯聯</option>
+                            <option value="裕民" @if (Model.dealerName == "裕民") { <text> selected</text>}>裕民</option>
+                            <option value="國通" @if (Model.dealerName == "國通") { <text> selected</text>}>國通</option>
+                            <option value="裕昌" @if (Model.dealerName == "裕昌") { <text> selected</text>}>裕昌</option>
+                            <option value="連誠" @if (Model.dealerName == "連誠") { <text> selected</text>}>連誠</option>
+                            <option value="元智" @if (Model.dealerName == "元智") { <text> selected</text>}>元智</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group has-feedback">
+                    <input type="hidden" name="type" value="@TempData["dealerType"].ToString()" />
+                </div>
+                <div class="form-group has-feedback" style="padding-bottom:40px">
+                    <label for="inputEmail3" class="col-sm-3 control-label">營業所代碼(DMS)</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.dealerCode, new { @class = "form-control", placeholder = "營業所代碼(DMS)" })
+                    </div>
+                </div>
+                <div class="form-group has-feedback" style="padding-bottom:40px">
+                    <label for="inputEmail3" class="col-sm-3 control-label">營業所<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.businessOffice, new { @class = "form-control", placeholder = "營業所名稱", @readonly = true })
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback" style="padding-bottom:40px">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-xs-4">
+                        @if (TempData["UpdateRight"].ToString() == "True")
+                        {
+                            <button type="submit" class="btn btn-primary ">修改</button>
+                        }
+                        @if (TempData["DeleteRight"].ToString() == "True")
+                        {
+                            <a class="btn btn-danger" href="@Url.Action("Delete", "Dealer", new { seq = Model.seq })" onclick="return confirm('是否確定刪除')">刪除</a>
+                        }
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="">
+        <div class="">
+            @using (Html.BeginForm("UpdateInProgress", "Dealer", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <input type="hidden" name="seq" value="@Model.seq" />
+                <div class="form-group has-feedback">
+                    <input type="hidden" name="type" value="@TempData["dealerType"].ToString()" />
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">地區<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <select name="area" class="form-control">
+                                <option value="">==請選擇地區==</option>
+                                <option value="基隆市" @if (Model.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                                <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                                <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                                <option value="桃園市" @if (Model.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                                <option value="新竹市" @if (Model.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                                <option value="新竹縣" @if (Model.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                                <option value="苗栗縣" @if (Model.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                                <option value="台中市" @if (Model.area == "台中市") { <text> selected</text>}>台中市</option>
+                                <option value="彰化縣" @if (Model.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                                <option value="南投縣" @if (Model.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                                <option value="雲林縣" @if (Model.area == "雲林縣") { <text> selected</text>}>雲林縣</option>
+                                <option value="嘉義市" @if (Model.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                                <option value="嘉義縣" @if (Model.area == "嘉義縣") { <text> selected</text>}>嘉義縣</option>
+                                <option value="台南市" @if (Model.area == "台南市") { <text> selected</text>}>台南市</option>
+                                <option value="高雄市" @if (Model.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                                <option value="屏東縣" @if (Model.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                                <option value="台東縣" @if (Model.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                                <option value="花蓮縣" @if (Model.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                                <option value="宜蘭縣" @if (Model.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <select name="dealerName" class="form-control">
+                                <option value="">==請選擇經銷商==</option>
+                                <option value="裕信" @if (Model.dealerName == "裕信") { <text> selected</text>}>裕信</option>
+                                <option value="誠隆" @if (Model.dealerName == "誠隆") { <text> selected</text>}>誠隆</option>
+                                <option value="元隆" @if (Model.dealerName == "元隆") { <text> selected</text>}>元隆</option>
+                                <option value="裕新" @if (Model.dealerName == "裕新") { <text> selected</text>}>裕新</option>
+                                <option value="裕唐" @if (Model.dealerName == "裕唐") { <text> selected</text>}>裕唐</option>
+                                <option value="匯聯" @if (Model.dealerName == "匯聯") { <text> selected</text>}>匯聯</option>
+                                <option value="裕民" @if (Model.dealerName == "裕民") { <text> selected</text>}>裕民</option>
+                                <option value="國通" @if (Model.dealerName == "國通") { <text> selected</text>}>國通</option>
+                                <option value="裕昌" @if (Model.dealerName == "裕昌") { <text> selected</text>}>裕昌</option>
+                                <option value="連誠" @if (Model.dealerName == "連誠") { <text> selected</text>}>連誠</option>
+                                <option value="元智" @if (Model.dealerName == "元智") { <text> selected</text>}>元智</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所短稱<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            @Html.TextBoxFor(m => m.businessOffice2, new { @class = "form-control", placeholder = "營業所名稱", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所全名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            @Html.TextBoxFor(m => m.businessOffice, new { @class = "form-control", placeholder = "營業所全名", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所代碼(DMS)</label>
+                            @Html.TextBoxFor(m => m.dealerCode, new { @class = "form-control", placeholder = "營業所代碼(DMS)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <input id="picture" name="picture" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                            <a href="#bannerformmodal" data-toggle="modal" data-target="#bannerformmodal">@Model.picture</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">Email</label>
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所電話<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <input type="text" class="form-control" name="telAreaCode" placeholder="區碼" value="@Model.telAreaCode" />
+                                </div>
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(m => m.tel, new { @class = "form-control", placeholder = "營業所電話" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-12" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所地址<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            @Html.TextBoxFor(m => m.address, new { @class = "form-control", placeholder = "營業所地址" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業所地址<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            @Html.TextAreaFor(
+                         model => model.gmap,
+                         new { @class = "form-control", placeholder = "Google map", style = "width: 640px; height: 200px;" }
+                     )
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:20px">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="">營業日期<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <select class="form-control pull-right select2" multiple="multiple" name="busDays[]">
+                                <option value="星期一" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期一")) { <text> selected</text>}>星期一</option>
+                                <option value="星期二" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期二")) { <text> selected</text>}>星期二</option>
+                                <option value="星期三" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期三")) { <text> selected</text>}>星期三</option>
+                                <option value="星期四" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期四")) { <text> selected</text>}>星期四</option>
+                                <option value="星期五" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期五")) { <text> selected</text>}>星期五</option>
+                                <option value="星期六" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期六")) { <text> selected</text>}>星期六</option>
+                                <option value="星期日" @if (!string.IsNullOrEmpty(Model.busDay) && Model.busDay.Contains("星期日")) { <text> selected</text>}>星期日</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>日間營業時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="">
+                                <input type="text" name="businessStartHourDay" class="form-control timepicker" value="@Model.businessStartHourDay">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="">
+                                <input type="text" name="businessEndHourDay" class="form-control timepicker" value="@Model.businessEndHourDay">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="">
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>夜間營業時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="">
+                                <input type="text" name="businessStartHourNight" class="form-control timepicker" value="@Model.businessEndHourDay">
+                                @*<input type="text" id="businessEndHourNight" class="form-control timepicker">*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="">
+                                <input type="text" name="businessEndHourNight" class="form-control timepicker" value="@Model.businessEndHourNight">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-xs-4">
+                        @if (TempData["UpdateRight"].ToString() == "True")
+                        {
+                            <button type="submit" class="btn btn-primary ">修改</button>
+                        }
+                        @if (TempData["DeleteRight"].ToString() == "True")
+                        {
+                            <a class="btn btn-danger" href="@Url.Action("Delete", "Dealer", new { seq = Model.seq })" onclick="return confirm('是否確定刪除')">刪除</a>
+                        }
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+<div class="modal fade" id="bannerformmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">圖片</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.picture" style="width:240px;">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+    @Scripts.Render("~/AdminLTE/plugins/input-mask/js")
+    @Scripts.Render("~/AdminLTE/plugins/momentjs/js")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/colorpicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/timepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/icheck/js")
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+
+    <script>
+        $('.select2').select2();
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "經銷據點管理") {
+                navItem.addClass('active');
+            }
+        });
+    </script>
+}
+
+

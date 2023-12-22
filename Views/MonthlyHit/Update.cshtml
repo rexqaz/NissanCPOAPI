@@ -1,0 +1,201 @@
+﻿@model WebApplication.Models.Shops
+@{
+    ViewBag.Title = "編輯本月主打";
+    ViewBag.icon = "fa fa-pencil-square";
+}
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+<style>
+    img {
+        width: 400px;
+        height: auto;
+    }
+</style>
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div>
+    <form method="post" action="@Url.Action("UpdateInProgress", "MonthlyHit")" enctype="multipart/form-data" onsubmit="return confirm('是否確定修改?');">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <input name="seq" type="hidden" value="@Model.seq" />
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-6 control-label" style="font-size:large">選擇經銷商及中古車營業據點</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="@Model.dealer" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">中古車營業據點<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="@Model.stronghold" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top:1px solid black" />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">選擇車輛</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車型<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="@Model.carModel" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-bottom:30px">
+                        <div class="form-group has-feedback">
+                            <label for="inputEmail3" class="col-sm-3 control-label">出廠年月<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="col-sm-9">
+                                <input class="form-control" value="@Model.yearOfManufacture" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">里程數<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="@Model.milage" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">編號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="@Model.ShopNo" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top:1px solid black" />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">排序及圖框</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">排序<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="hitOrder">
+                                <option value="1" @if (Model.hitOrder == 1) { <text> selected</text>}>1</option>
+                                <option value="2" @if (Model.hitOrder == 2) { <text> selected</text>}>2</option>
+                                <option value="3" @if (Model.hitOrder == 3) { <text> selected</text>}>3</option>
+                                <option value="4" @if (Model.hitOrder == 4) { <text> selected</text>}>4</option>
+                                <option value="5" @if (Model.hitOrder == 5) { <text> selected</text>}>5</option>
+                                <option value="6" @if (Model.hitOrder == 6) { <text> selected</text>}>6</option>
+                                <option value="7" @if (Model.hitOrder == 7) { <text> selected</text>}>7</option>
+                                <option value="8" @if (Model.hitOrder == 8) { <text> selected</text>}>8</option>
+                                <option value="9" @if (Model.hitOrder == 9) { <text> selected</text>}>9</option>
+                                <option value="10" @if (Model.hitOrder == 10) { <text> selected</text>}>10</option>
+                                <option value="11" @if (Model.hitOrder == 11) { <text> selected</text>}>11</option>
+                                <option value="12" @if (Model.hitOrder == 12) { <text> selected</text>}>12</option>
+                                <option value="13" @if (Model.hitOrder == 13) { <text> selected</text>}>13</option>
+                                <option value="14" @if (Model.hitOrder == 14) { <text> selected</text>}>14</option>
+                                <option value="15" @if (Model.hitOrder == 15) { <text> selected</text>}>15</option>
+                                <option value="16" @if (Model.hitOrder == 16) { <text> selected</text>}>16</option>
+                                <option value="17" @if (Model.hitOrder == 17) { <text> selected</text>}>17</option>
+                                <option value="18" @if (Model.hitOrder == 18) { <text> selected</text>}>18</option>
+                                <option value="19" @if (Model.hitOrder == 19) { <text> selected</text>}>19</option>
+                                <option value="20" @if (Model.hitOrder == 20) { <text> selected</text>}>20</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">圖框<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="isFrame">
+                                <option value="有" @if (Model.isFrame == "有") { <text> selected</text>}>有</option>
+                                <option value="無" @if (Model.isFrame == "無") { <text> selected</text>}>無</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (TempData["UpdateRight"].ToString() == "True")
+            {
+                <input type="submit" class="btn btn-success" style="padding-left:17px" value="修改" name="action" />
+            }
+            @if (TempData["DeleteRight"].ToString() == "True")
+            {
+                <a class="btn btn-danger" href="@Url.Action("Delete", "MonthlyHit", new { seq = Model.seq })" onclick="return confirm('是否確定刪除')">刪除</a>
+            }
+        </div>
+
+    </form>
+
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+
+    <script>
+        
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "本月主打 Top 20") {
+                navItem.addClass('active');
+            }
+        });        
+    </script>
+}

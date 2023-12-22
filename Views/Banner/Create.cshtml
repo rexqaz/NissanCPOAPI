@@ -1,0 +1,286 @@
+﻿@model WebApplication.Models.BannerViewModel
+@{
+    ViewBag.Title = "新增Banner";
+    ViewBag.icon = "fa fa-bullhorn";
+}
+
+@Styles.Render("~/AdminLTE/plugins/daterangepicker/css")
+@Styles.Render("~/Styles/Elements/Modals")
+
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@Html.Raw(@TempData["MemberResult"].ToString())</strong>
+        </div>
+    }
+}
+
+<div class="col-xs-8">
+    <form method="post" action="@Url.Action("CreateInProgress", "Banner")" enctype="multipart/form-data" onsubmit="return confirm('是否確定新增?');">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">Banner名稱<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="">
+                            <input name="banner_name" class="form-control" value="" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">標題摘錄</label>
+                        <div class="col-sm-10" style="">
+                            <input name="title" class="form-control" value="" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">副標題</label>
+                        <div class="col-sm-10" style="">
+                            <input name="subTitle" class="form-control" value="" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">時間排程<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="">
+                            <input type="text" class="form-control pull-right" id="publishRange" name="publishRange">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="col-md-12">
+            @Html.TextArea("bodyContent")
+            @Html.ValidationMessageFor(model => model.bodyContent)
+        </div>*@
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">手機圖片<span style="color:#a94442;font-size: 18px;">*</span>(390 * 350)</label>
+                        <div class="col-sm-10" style="">
+                            <input id="mobilePicture" name="mobilePicture" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">桌機圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="">
+                            <input id="picture" name="picture" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">網址<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="">
+                            <input name="url" class="form-control" id="url" value="" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-10" style="">
+                            <select name="banner_sort">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">貼文狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="">
+                            <select name="status">
+                                <option value="">==請選擇狀態==</option>
+                                <option value="啟用">啟用</option>
+                                <option value="停用">停用</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg" id="preview">
+            預覽
+        </button>*@
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="儲存草稿" name="action" />
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="送出" name="action" />
+        </div>
+
+    </form>
+</div>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Banner預覽</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="attach">
+                <a href="" id="attachUrl" target="_blank"><img src="" id="attachPreview" style="width:240px;"></a>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Banner預覽</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="attach">
+                <a href="" id="attachUrl" target="_blank"><img src="" id="attachPreview" style="width:240px;"></a>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    <!--<script src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")" type="text/javascript"></script>-->
+    @*加入圖片上傳頁籤，放在頁面底下，放在頁面head區的話，會抓不到myText DOM*@
+    <!--<script type="text/javascript">
+        CKEDITOR.replace('Content', { filebrowserImageUploadUrl: '/Upload/UploadPicture' });
+    </script>-->
+    <!-- include summernote css/js-->
+    @*<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>*@
+
+    <script>
+        $(function () {
+            //Date range picker
+            $('#publishRange').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+        });
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "Banner管理") {
+                navItem.addClass('active');
+            }
+        }); 
+
+        $(document).on("click", "#preview", function () {
+            $('#attachUrl').attr('href', $('#url').val())
+        });
+        //$(document).ready(function () {
+        //    const [file] = picture.files
+        //    if (file) {
+        //        attachPreview.src = URL.createObjectURL(file)
+        //    }
+        //});
+
+        $(function () {
+            //Date range picker
+            $('#publishRange').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+        });
+
+        $('#picture').on('change', function () {
+            const [file] = picture.files
+            if (file) {
+                attachPreview.src = URL.createObjectURL(file)
+            }
+        })
+
+        $('#mobilePicture').on('change', function () {
+            const [file] = mobilePicture.files
+            if (file) {
+                attachPreview.src = URL.createObjectURL(file)
+            }
+        })
+    </script>
+}

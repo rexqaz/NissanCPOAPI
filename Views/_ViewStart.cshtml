@@ -1,0 +1,10 @@
+﻿@{
+    if (Html.getBrand(User.Identity.Name) == "NISSAN")
+    {
+        Layout = "~/Views/Shared/_LayoutNissan.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutInfiniti.cshtml";
+    }
+}

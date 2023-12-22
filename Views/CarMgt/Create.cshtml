@@ -1,0 +1,739 @@
+﻿@model WebApplication.Models.CarShopViewModel
+@{
+    ViewBag.Title = "新增車輛";
+    ViewBag.icon = "fa fa-car";
+}
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+@Styles.Render("~/AdminLTE/plugins/select2/css")
+<style>
+    img {
+        width: 400px;
+        height: auto;
+    }
+</style>
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div>
+    <form method="post" action="@Url.Action("CreateInProgress", "CarMgt")" enctype="multipart/form-data" onsubmit="return confirm('是否確定新增?');">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">車輛編號 </label>
+                        <input name="shopNo" readonly class="form-control" value="@TempData["shopNo"].ToString()" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">建立日期 </label>
+                        <input name="shopNo" readonly class="form-control" value="@TempData["today"].ToString()" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">最後更新日期 </label>
+                        <input name="shopNo" readonly class="form-control" value="@TempData["today"].ToString()" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">地區 </label>
+                        <select class="form-control pull-right" name="area" id="area" onchange="GetDealer()">
+                            <option value="台北市">台北市</option>
+                            <option value="新北市">新北市</option>
+                            <option value="基隆市">基隆市</option>
+                            <option value="桃園市">桃園市</option>
+                            <option value="新竹市">新竹市</option>
+                            <option value="新竹縣">新竹縣</option>
+                            <option value="苗栗縣">苗栗縣</option>
+                            <option value="台中市">台中市</option>
+                            <option value="彰化縣">彰化縣</option>
+                            <option value="南投縣">南投縣</option>
+                            <option value="雲林縣">雲林縣</option>
+                            <option value="嘉義市">嘉義市</option>
+                            <option value="嘉義縣">嘉義縣</option>
+                            <option value="台南市">台南市</option>
+                            <option value="高雄市">高雄市</option>
+                            <option value="屏東縣">屏東縣</option>
+                            <option value="台東縣">台東縣</option>
+                            <option value="花蓮縣">花蓮縣</option>
+                            <option value="宜蘭縣">宜蘭縣</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">經銷商 </label>
+                        <select class="form-control pull-right" name="dealer" id="dealer">
+                            <option value="">==請選擇==</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">中古車據點 </label>
+                        <select class="form-control pull-right" name="stronghold" id="stronghold">
+                            <option value="">==請選擇==</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">車系 </label>
+                        <select class="form-control pull-right" name="carType">
+                            <option value="轎車">轎車</option>
+                            <option value="休旅車">休旅車</option>
+                            <option value="電動車">電動車</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">車款 </label>
+                        <select class="form-control pull-right" name="carModel">
+                            @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                            {
+                                <option value="ALTIMA">ALTIMA</option>
+                                <option value="BLUEBIRD SYLPHY">BLUEBIRD SYLPHY</option>
+                                <option value="GTR">GTR</option>
+                                <option value="JUKE">JUKE</option>
+                                <option value="KICKS">KICKS</option>
+                                <option value="LEAF">LEAF</option>
+                                <option value="LIVINA">LIVINA</option>
+                                <option value="MARCH">MARCH</option>
+                                <option value="QUEST">QUEST</option>
+                                <option value="ROGUE">ROGUE</option>
+                                <option value="SENTRA">SENTRA</option>
+                                <option value="TEANA">TEANA</option>
+                                <option value="TIIDA">TIIDA</option>
+                                <option value="X-TRAIL">X-TRAIL</option>
+                                <option value="350Z">350Z</option>
+                                <option value="370Z">370Z</option>
+
+                            }
+                            else
+                            {
+                                <option value="Q50">Q50</option>
+                                <option value="Q60">Q60</option>
+                                <option value="QX30">QX30</option>
+                                <option value="QX50">QX50</option>
+                                <option value="QX55">QX55</option>
+                                <option value="QX60">QX60</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">出廠年月 </label>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <select class="form-control" name="yearOfManufacture" id="yearOfManufacture">
+                                    <option value="0">西元年</option>
+
+                                </select>
+                            </div>
+                            <div class="col-xs-6">
+                                <select class="form-control" name="monthOfManufacture">
+                                    <option>月份</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">里程數 </label>
+                        <input name="milage" class="form-control" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">顏色 </label>
+                        <select class="form-control pull-right" name="outerColor">
+                            <option value="黑色">黑色</option>
+                            <option value="灰色">灰色</option>
+                            <option value="銀色">銀色</option>
+                            <option value="白色">白色</option>
+                            <option value="紅色">紅色</option>
+                            <option value="藍色">藍色</option>
+                            <option value="橘色">橘色</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">燃料 </label>
+                        <select class="form-control pull-right" name="fuelType">
+                            <option value="汽油">汽油</option>
+                            <option value="柴油">柴油</option>
+                            <option value="電動">電動</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">驅動方式 </label>
+                        <select class="form-control pull-right" name="driveMode">
+                            <option value="2WD">2WD</option>
+                            <option value="4WD">4WD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">排氣量 </label>
+                        <input name="displacement" class="form-control" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">內外裝配備 </label>
+                        <select class="form-control pull-right select2" multiple="multiple" name="outEquip[]">
+                            @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                            {
+                                <option value="LED頭燈">LED頭燈</option>
+                                <option value="感應電動尾門">感應電動尾門</option>
+                                <option value="全景式電動天窗">全景式電動天窗</option>
+                                <option value="真皮座椅">真皮座椅</option>
+                                <option value="電動座椅">電動座椅</option>
+                                <option value="藍芽連線">藍芽連線</option>
+                                <option value="倒車影像顯示">倒車影像顯示</option>
+                            }
+                            else
+                            {
+                                <option value="LED主動轉向頭燈">LED主動轉向頭燈</option>
+                                <option value="電動全景天窗">電動全景天窗</option>
+                                <option value="腳踢感應電動尾門">腳踢感應電動尾門</option>
+                                <option value="智慧鑰匙遙控引擎啟閉">智慧鑰匙遙控引擎啟閉</option>
+                                <option value="座椅記憶功能">座椅記憶功能</option>
+                                <option value="Apple Carplay/Android Auto整合系統">Apple Carplay/Android Auto整合系統</option>
+                                <option value="BOSE頂級音響系統">BOSE頂級音響系統</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">安全重點功能 </label>
+                        <select class="form-control pull-right select2" multiple="multiple" name="feature[]">
+                            @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                            {
+                                <option value="安全氣囊">安全氣囊</option>
+                                <option value="ICC智慧型全速域定速控制系統">ICC智慧型全速域定速控制系統</option>
+                                <option value="LDW車道偏離警示系統">LDW車道偏離警示系統</option>
+                                <option value="AVM 360°環景影像監控系統">AVM 360°環景影像監控系統</option>
+                                <option value="IEB防追撞緊急煞車系統">IEB防追撞緊急煞車系統</option>
+                            }
+                            else
+                            {
+                                <option value="AVM環景顯示附MOD物體偵測">AVM環景顯示附MOD物體偵測</option>
+                                <option value="HUD全彩資訊投影顯示">HUD全彩資訊投影顯示</option>
+                                <option value="ICC全速域智慧定速系統">ICC全速域智慧定速系統</option>
+                                <option value="LKA車道維持輔助系統">LKA車道維持輔助系統</option>
+                                <option value="BSW盲點側撞警示系統">BSW盲點側撞警示系統</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">馬力 </label>
+                        <input name="horsepower" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">售價 </label>
+                        <input name="price" class="form-control" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">推薦理由 </label>
+                        <input name="description" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">1.代表圖及縮圖 </label>
+                        <input id="carCondition1" name="carCondition1" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+
+                        <a href="#" class="imgPreview"><img id="blah1" src="#" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">2.左前</label>
+                        <input id="carCondition2" name="carCondition2" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah2" src="#" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">3.右前</label>
+                        <input id="carCondition3" name="carCondition3" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah3" src="#" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">4.左後</label>
+                        <input id="carCondition4" name="carCondition4" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah4" src="#" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">5.右後</label>
+                        <input id="carCondition5" name="carCondition5" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah5" src="#" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px;display:none" id="pic6Area">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">6.</label>
+                        <input id="carCondition6" name="carCondition6" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah6" src="#" alt="" /></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" id="area78" style="display: none">
+                <div class="col-xs-6" style="padding-bottom:20px;display:none" id="pic7Area">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">7.</label>
+                        <input id="carCondition7" name="carCondition7" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah7" src="#" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px;display:none" id="pic8Area">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">8.</label>
+                        <input id="carCondition8" name="carCondition8" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah8" src="#" alt="" /></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" id="area910" style="display: none">
+                <div class="col-xs-6" style="padding-bottom:20px;display:none" id="pic9Area">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">9.</label>
+                        <input id="carCondition9" name="carCondition9" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah9" src="#" alt="" /></a>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px;display:none" id="pic10Area">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">10.</label>
+                        <input id="carCondition10" name="carCondition10" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#" class="imgPreview"><img id="blah10" src="#" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <input type="button" onclick="addPic()" style="background-color:black;color:white" value="+新增照片張數" />
+                        @*<button class="btn" id="addPic" onclick="AddPic()" style="background-color:black;color:white">+新增照片張數</button>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                        {
+                            <label for="inputEmail3" class="">上傳查定表 </label>
+                            <input id="inspectionTable" name="inspectionTable" class="form-control" type="file" accept=".pdf" style="margin-bottom:5px;" />
+                            <a href="" target="_blank" id="inspectionTablePreview"></a>
+                        }
+                        else
+                        {
+                            <label for="inputEmail3" class="">上傳保證書 </label>
+                            <input id="inspectionTable" name="inspectionTable" class="form-control" type="file" accept=".pdf" style="margin-bottom:5px;" />
+                            <a href="" target="_blank" id="inspectionTablePreview"></a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">成交回報</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">會員姓名 </label>
+                        <div class="col-sm-9">
+                            <input name="member" class="form-control" value="" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">負責中古車銷售顧問 </label>
+                        <div class="col-sm-9">
+                            <input name="consultant" class="form-control" value="" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">出售價 </label>
+                        <div class="col-sm-9">
+                            <input name="sellingPrice" class="form-control" value="" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">成交價 </label>
+                        <div class="col-sm-9">
+                            <input name="finalPrice" class="form-control" value="" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">正式訂單編號</label>
+                        <div class="col-sm-9">
+                            <input name="contact" class="form-control" value="" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">合約書 </label>
+                        <div class="col-sm-9">
+                            <input id="contract" name="contract" class="form-control" type="file" accept="application/pdf" style="margin-bottom:5px;" disabled />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="儲存" name="action" />
+            @*<input type="submit" class="btn btn-primary" style="padding-left:17px" value="上架申請" name="action" />*@
+        </div>
+
+    </form>
+
+    <hr style="border-top:1px solid black" />
+
+    <div class="box-body">
+        <table id="notice" class="table table-bordered table-striped" style="margin-bottom:50px">
+            <thead>
+                <tr>
+                    <th colspan="3">關注紀錄</th>
+                </tr>
+                <tr>
+                    <th>時間</th>
+                    <th>關注次數</th>
+                    <th>累積關注次數</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        @*<hr style="border-top:1px solid black" />
+            <table id="orderVisit" class="table table-bordered table-striped" style="margin-bottom:50px">
+                <thead>
+                    <tr>
+                        <th colspan="7">預約賞車紀錄</th>
+                    </tr>
+                    <tr>
+                        <th>時間</th>
+                        <th>會員姓名</th>
+                        <th>稱謂</th>
+                        <th>手機</th>
+                        <th>指定銷售顧問</th>
+                        <th>服務銷售顧問</th>
+                        <th>服務狀態</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>*@
+    </div>
+</div>
+
+<div class="modal fade" id="carConditionPic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">檢視上傳照片</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="" id="imgPreview" style="width:100%;height:auto">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+
+<script>
+            let yearStart = 2011;
+            let currentYear = new Date().getFullYear();
+            for (let i = yearStart; i <= currentYear; i++) {
+                $('#yearOfManufacture').append("<option value='" + i + "'>" + i + "</option>")
+            }
+
+        $('.select2').select2();
+        let addPicCount = 5;
+
+        function addPic() {
+            console.log(addPicCount);
+            if (addPicCount == 10) {
+                alert("照片上傳最多10張!!");
+                return;
+            }
+
+            if (addPicCount == 5) {
+                addPicCount++;
+                $('#pic6Area').show();
+            }
+            else if (addPicCount == 6) {
+                addPicCount++;
+                $('#area78').show();
+                $('#pic7Area').show();
+            }
+            else if (addPicCount == 7) {
+                addPicCount++;
+                $('#pic8Area').show();
+            }
+            else if (addPicCount == 8) {
+                addPicCount++;
+                $('#area910').show();
+                $('#pic9Area').show();
+            }
+            else if (addPicCount == 9) {
+                addPicCount++;
+                $('#pic10Area').show();
+            }
+        }
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "車輛管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        carCondition1.onchange = evt => {
+            const [file] = carCondition1.files
+            if (file) {
+                blah1.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition2.onchange = evt => {
+            const [file] = carCondition2.files
+            if (file) {
+                blah2.src = URL.createObjectURL(file)
+            }
+        }
+
+
+        carCondition3.onchange = evt => {
+            const [file] = carCondition3.files
+            if (file) {
+                blah3.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition4.onchange = evt => {
+            const [file] = carCondition4.files
+            if (file) {
+                blah4.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition5.onchange = evt => {
+            const [file] = carCondition5.files
+            if (file) {
+                blah5.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition7.onchange = evt => {
+            const [file] = carCondition7.files
+            if (file) {
+                blah7.src = URL.createObjectURL(file)
+            }
+        }
+
+
+        carCondition8.onchange = evt => {
+            const [file] = carCondition8.files
+            if (file) {
+                blah8.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition9.onchange = evt => {
+            const [file] = carCondition9.files
+            if (file) {
+                blah9.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition10.onchange = evt => {
+            const [file] = carCondition10.files
+            if (file) {
+                blah10.src = URL.createObjectURL(file)
+            }
+        }
+
+        carCondition6.onchange = evt => {
+            const [file] = carCondition6.files
+            if (file) {
+                blah6.src = URL.createObjectURL(file)
+            }
+        }
+
+        inspectionTable.onchange = evt => {
+            const [file] = inspectionTable.files
+            if (file) {
+                inspectionTablePreview.href = URL.createObjectURL(file);
+                inspectionTablePreview.text = '預覽查定表';
+            }
+        }
+
+        $(".imgPreview").click(function () {
+            $("#carConditionPic").modal("show");
+            //console.log($(this).children().first().attr('src'));
+            $("#imgPreview").attr("src", $(this).children().first().attr('src'));
+        });
+
+        function GetDealer() {
+            var area = $('#area').find(":selected").val();;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDealer", "CarMgt")',
+                data: { area: area },
+                success: function (data) {
+                    var list = data.list;
+                    $('#dealer').empty();
+                    $('#dealer').append("<option value=''>==請選擇==</option>")
+                    $.each(list, function (index, item) {
+                        $('#dealer').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                    $('#dealer').val('');
+
+
+                    $('#stronghold').empty();
+                    $('#stronghold').append("<option value=''>==請選擇==</option>")
+                    $('#stronghold').val('');
+                }
+            })
+        }
+
+        $('#dealer').on('change', function () {
+            var dealer = this.value;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStronghold", "CarMgt")',
+                data: { dealer: dealer },
+                success: function (data) {
+                    $('#stronghold').empty();
+                    $('#stronghold').append("<option value=''>==請選擇==</option>")
+                    $.each(data, function (index, item) {
+                        $('#stronghold').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                    $('#stronghold').val('');
+                }
+            })
+        });
+
+
+</script>
+}

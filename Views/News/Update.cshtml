@@ -1,0 +1,291 @@
+﻿@model WebApplication.Models.NewsViewModel
+@{
+    ViewBag.Title = "修改最新消息";
+    ViewBag.icon = "fa fa-calendar";
+}
+
+@Styles.Render("~/AdminLTE/plugins/daterangepicker/css")
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@Html.Raw(@TempData["MemberResult"].ToString())</strong>
+        </div>
+    }
+}
+
+<form method="post" action="@Url.Action("UpdateInProgress", "News")" enctype="multipart/form-data" onsubmit="return confirm('是否確定修改?');">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <input type="hidden" value="@Model.id" name="id" />
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:30px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">標題<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <input type="text" class="form-control pull-right" id="title" name="title" value="@Model.title" onkeydown="checknum()" onkeyup="checknum()">
+                        <input id="in" type="text" disabled="disabled" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12" style="padding-bottom:20px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">時間排程<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <input type="text" class="form-control pull-right" id="publishRange" name="publishRange" value="@Model.publishRange">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:20px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">貼文內容<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <textarea id="bodyContent" name="bodyContent">@Model.bodyContent</textarea>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:20px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">貼文內容摘要<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <input type="text" class="form-control pull-right" id="showBody" name="showBody" value="@Model.showBody" onkeydown="checknum2()" onkeyup="checknum2()">
+                        <input id="in2" type="text" disabled="disabled" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:20px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">縮圖圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <input id="picture" name="picture" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                        <a href="#bannerformmodal" data-toggle="modal" data-target="#bannerformmodal">@Model.picture</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="" style="padding-left:17px">
+                <div class="form-group has-feedback">
+
+                    <label for="inputEmail3" class="col-sm-2 control-label">貼文狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10" style="">
+                        <select name="status" id="status">
+                            <option value="">==請選擇狀態==</option>
+                            <option value="啟用" @if (Model.status == "啟用") { <text> selected</text>}>啟用</option>
+                            <option value="草稿" @if (Model.status == "草稿") { <text> selected</text>}>草稿</option>
+                            <option value="停用" @if (Model.status == "停用") { <text> selected</text>}>停用</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <input id="picture" name="picture" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+            <img id="preview" src='' style="width:240px;">
+        </div>*@
+
+        <br />
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg" id="preview">
+            預覽
+        </button>
+        @*@if (TempData["UpdateRight"].ToString() == "True")
+        {
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="儲存草稿" name="action" />
+        }*@
+        @if (TempData["DeleteRight"].ToString() == "True")
+        {
+            <a class="btn btn-danger" href="@Url.Action("Delete", "News", new { seq = Model.id })" onclick="return confirm('是否確定刪除')">刪除</a>
+        }
+        @if (TempData["UpdateRight"].ToString() == "True")
+        {
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="更新" name="action" />
+        }
+    </div>
+
+</form>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">貼文預覽</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="attach">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="bannerformmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">圖片</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.picture" style="width:240px;">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    <!--<script src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")" type="text/javascript"></script>-->
+    @*加入圖片上傳頁籤，放在頁面底下，放在頁面head區的話，會抓不到myText DOM*@
+    <!--<script type="text/javascript">
+        CKEDITOR.replace('Content', { filebrowserImageUploadUrl: '/Upload/UploadPicture' });
+    </script>-->
+    <!-- include summernote css/js-->
+    @*<link href="~/Content/summernote.css" rel="stylesheet">
+        <script src="~/Scripts/summernote.js"></script>*@
+    <link href="~/Content/summernote/summernote.css" rel="stylesheet">
+    <script src="~/Content/summernote/summernote.min.js"></script>
+    <script src="~/Content/summernote/summernote-zh-TW.js"></script>
+
+    <script>
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "最新消息管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        $(document).on("click", "#preview", function () {
+            console.log($('#bodyContent').val());
+            $('#attach').html($('#bodyContent').val())
+        });
+
+        $(document).ready(function () {
+            checknum();
+            checknum2();
+            $('#bodyContent').summernote({
+                lang: "zh-TW"
+                //callbacks: {
+                //    onImageUpload: function (files) {
+                //        sendFile(files[0]);
+                //    }
+                //}
+            });
+
+            //上传文件到服务器
+            function sendFile(file) {
+                var data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data: data,
+                    type: "POST",
+                    // 调用操作：控制器：HomeController中的SummernoteUploadImage
+                    url: '@Url.Action("SummernoteUploadImage", "News")',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        // 上传到服务器后，将图像插入编辑器中的正确位置。
+                        $('#bodyContent').summernote('insertImage', response.Url, function ($image) {
+                            //console.log(response.base64);
+                            $image.css('width', $image.width());
+                            $('#bodyContent').text().replace(response.Url, 'data:image/png;base64, ' + response.base64);
+                        });
+                        //console.log($('#bodyContent').text());
+
+                    }
+                });
+            }
+        });
+
+        $(function () {
+            //Date range picker
+            $('#publishRange').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+        });
+
+        function checknum() {
+            var nMax = 24;
+            var textDom = document.getElementById("title");
+            var len = textDom.value.length;
+            if (len > nMax) {
+                textDom.value = textDom.value.substring(0, nMax);
+                return;
+            }
+            document.getElementById("in").value = "尚可輸入" + (nMax - len) + "個字";
+        }
+
+        function checknum2() {
+            var nMax = 50;
+            var textDom = document.getElementById("showBody");
+            var len = textDom.value.length;
+            if (len > nMax) {
+                textDom.value = textDom.value.substring(0, nMax);
+                return;
+            }
+            document.getElementById("in2").value = "尚可輸入" + (nMax - len) + "個字";
+        }
+    </script>
+}

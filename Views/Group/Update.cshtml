@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "修改群組";
+    ViewBag.icon = "fa fa-file-text";
+}
+
+<style>
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 20px;
+    }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+<div class="card card-secondary">
+
+    <div class="card-body">
+        <form role="form" method="POST" action="@Url.Action("UpdateInProgress", "Group", new { roleId = Model.roleId})">
+            <div class="row">
+                <div class="col-sm-10">
+                    <!-- checkbox -->
+                    <div class="form-group">
+                        @foreach (var menu in Model.groups)
+                        {
+                            string area = menu.id.ToString() + "area";
+                            <div class="custom-control custom-checkbox">
+                                <label class="switch">
+                                    <input type="checkbox" id="@menu.id" name="permission[]" value=@menu.id @if (menu.isChecked) { <text> checked</text>} onclick="SetPermission(this)">
+                                    <span class="slider round"></span>
+                                </label>
+                                @*<input class="custom-control-input" type="checkbox" id="@menu.id" name="permission[]" value=@menu.id @if (menu.isChecked) { <text> checked</text>} />*@
+                                <label for="@menu.id}}" class="custom-control-label">@menu.menuName</label>
+                                <div id="@area" style="@if (!menu.isChecked) { <text> display:none</text>}">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        </div>
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                    @for (int i = 0; i < menu.subMenus.Count; i = i + 2)
+                                    {
+                                        if (i + 1 < menu.subMenus.Count)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="custom-control custom-checkbox" style="margin-left:50px">
+                                                        <label class="switch">
+                                                            <input class="@menu.id" type="checkbox" id="@menu.subMenus[i].id" name="permission[]" value=@menu.subMenus[i].id @if (menu.subMenus[i].isChecked) { <text> checked</text>}>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        @*<input class="custom-control-input" type="checkbox" id="@submenu.id" name="permission[]" value=@submenu.id @if (submenu.isChecked) { <text> checked</text>}>*@
+                                                        <label for="@menu.subMenus[i].id" class="custom-control-label">@menu.subMenus[i].menuName</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="custom-control custom-checkbox" style="margin-left:50px">
+                                                        <label class="switch">
+                                                            <input class="@menu.id" type="checkbox" id="@menu.subMenus[i + 1].id" name="permission[]" value=@menu.subMenus[i + 1].id @if (menu.subMenus[i + 1].isChecked) { <text> checked</text>}>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        @*<input class="custom-control-input" type="checkbox" id="@submenu.id" name="permission[]" value=@submenu.id @if (submenu.isChecked) { <text> checked</text>}>*@
+                                                        <label for="@menu.subMenus[i + 1].id" class="custom-control-label">@menu.subMenus[i + 1].menuName</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="custom-control custom-checkbox" style="margin-left:50px">
+                                                        <label class="switch">
+                                                            <input class="@menu.id" type="checkbox" id="@menu.subMenus[i].id" name="permission[]" value=@menu.subMenus[i].id @if (menu.subMenus[i].isChecked) { <text> checked</text>}>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        @*<input class="custom-control-input" type="checkbox" id="@submenu.id" name="permission[]" value=@submenu.id @if (submenu.isChecked) { <text> checked</text>}>*@
+                                                        <label for="@menu.subMenus[i].id" class="custom-control-label">@menu.subMenus[i].menuName</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select name="status" class="form-control">
+                            <option value="True" @if (Model.status == true) { <text> selected</text>}>啟用</option>
+                            <option value="False" @if (Model.status == false) { <text> selected</text>}>停用</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            @if (TempData["UpdateRight"].ToString() == "True")
+            {
+                <button class="btn btn-primary" type="submit" onclick="return confirm('是否確認修改此筆資料?');">修改</button>
+            }
+            @if (TempData["DeleteRight"].ToString() == "True")
+            {
+                <a class="btn btn-danger" href="@Url.Action("Delete", "Group", new { seq = Model.roleId })" onclick="return confirm('是否確定刪除')">刪除</a>
+                @*<a class="btn btn-success" href="@Url.Action("Index", "Group")">返回列表</a>*@
+            }
+        </form>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+    <script>
+        let hasMenu = '@TempData["hasMenu"].ToString()';
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "後台帳號管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        function SetPermission(cb) {
+            if (cb.checked == true) {
+                if (hasMenu == "False") {
+                    $("." + cb.id).prop('checked', true);
+                }
+                $("#" + cb.id + "area").show();
+            }
+            else {
+                $("#" + cb.id + "area").hide();
+                //$("." + cb.id).prop('checked', false);
+            }
+        }
+    </script>
+}

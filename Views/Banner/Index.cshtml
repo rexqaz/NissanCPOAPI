@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "Banner管理";
+    ViewBag.icon = "fa fa-bullhorn";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Tables/Data/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+
+@if (Html.getBrand(User.Identity.Name) == "NISSAN")
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #B72E2E;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #557DB8;
+        }
+    </style>
+}
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OKCreate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>新增成功!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "OKUpdate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>更新成功!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "OKDelete")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>刪除成功!!。</strong>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="row" style="padding-top:40px">
+    <div class="col-xs-12 " style="text-align:right">
+        @if (TempData["CreateRight"].ToString() == "True")
+        {
+            <a class="btn btn-primary" href="@Url.Action("Create", "Banner")" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'") )>新增</a>
+            @*<a class="btn btn-primary" href="@Url.Action("ExportCSV", "Banner")" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>下載報表</a>*@
+        }
+    </div>
+    <div class="col-xs-12">
+        <div class="">
+            @*<div class="box-header">
+                    <h3 class="box-title">Data Table With Full Features</h3>
+                </div>*@
+            <div class="box-body">
+                <table id="bannerTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>狀態</th>
+                            <th>排序</th>
+                            <th>時間排程</th>
+                            <th>Banner名稱</th>
+                            @*<th>編號</th>*@
+                            <th>標題摘錄</th>
+                            <th>點擊數</th>
+                            @*<th>曝光數</th>*@
+                            <th>建立時間</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var member in Model)
+                            {
+                                <tr>
+                                    <th>@if (member.status)
+                                    { <text>啟用</text>}
+                                    else { <text>停用</text>}</th>
+                                    <td>@member.seq</td>
+                                    <td>@member.publishRange</td>
+                                    <td>@member.title</td>
+                                    <td>@member.createTime</td>
+                                    <td>@member.hitCount</td>
+                                    <td>@member.viewCount</td>
+                                    <td><a class="btn btn-warning" href="@Url.Action("Update", "Banner", new { seq = member.seq})">檢視</a></td>
+                                </tr>
+                            }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    <script>
+        //$('#search').on('keyup click', function () {
+        //    var table1 = $('#example1').DataTable();
+        //    table1.search($('#search').val()).draw();
+        //})
+        let updateRight = '@TempData["UpdateRight"].ToString()';
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "Banner管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        //$('#example1').DataTable({
+        //    "language": {
+        //        "processing": "處理中...",
+        //        "loadingRecords": "載入中...",
+        //        "lengthMenu": "顯示 _MENU_ 項結果",
+        //        "zeroRecords": "沒有符合的結果",
+        //        "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+        //        "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+        //        "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+        //        "infoPostFix": "",
+        //        "search": "搜尋:",
+        //        "paginate": {
+        //            "first": "第一頁",
+        //            "previous": "上一頁",
+        //            "next": "下一頁",
+        //            "last": "最後一頁"
+        //        },
+        //        "aria": {
+        //            "sortAscending": ": 升冪排列",
+        //            "sortDescending": ": 降冪排列"
+        //        }
+        //    }
+        //});
+
+        //$(function () {
+        //    $('#example1_filter').hide();
+        //});
+
+        $(document).ready(function () {
+            $('#bannerTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetBannerData", "Banner")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val()}
+            },
+            "columnDefs": [{
+                "targets": [6],
+                "sortable": true
+            }],
+                "columns": [
+                    //{ "data": "seq", "name": "編號", "autoWidth": true },
+                    { "data": "status", "name": "狀態", "autoWidth": true },
+                    { "data": "banner_sort", "name": "排序", "autoWidth": true },
+                    { "data": "publishRange", "name": "時間排程", "autoWidth": true },
+                    { "data": "banner_name", "name": "Banner名稱", "autoWidth": true },
+                    { "data": "title", "name": "標題摘錄", "autoWidth": true },
+                    { "data": "hitCount", "name": "點擊數", "autoWidth": true },
+                    {
+                        "data": "createTime", "name": "建立日期", "autoWidth": true, "render": function (data, row) {
+                            return moment(data).format("YYYY/MM/DD").toUpperCase()
+                        }
+                    },
+                    //{ "data": "viewCount", "name": "曝光數", "autoWidth": true },
+
+                    {
+                        "data": "seq",
+                        "render": function (data, row) { return updateRight == "False" ? '' : '<a href="Banner/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> '}
+                    },
+            ]
+            });
+
+
+            //$('#shopTable_filter').hide();
+
+            oTable = $('#bannerTable').DataTable();
+            $('#search').bind("keyup blur", function () {
+                //alert($('#search').val());
+                $('#bannerTable').DataTable().destroy();
+                $('#bannerTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetBannerData", "Banner")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val()}
+            },
+            "columnDefs": [{
+                "targets": [6],
+                "sortable": true
+            }],
+            "columns": [
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                { "data": "seq", "name": "編號", "autoWidth": true },
+                { "data": "publishRange", "name": "時間排程", "autoWidth": true },
+                { "data": "title", "name": "標題摘錄", "autoWidth": true },
+                {
+                    "data": "createTime", "name": "建立日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "hitCount", "name": "點擊數", "autoWidth": true },
+                //{ "data": "viewCount", "name": "曝光數", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return updateRight == "False" ? '' : '<a href="Banner/Update?seq=' + data + '"  class="btn btn-warning">檢視</a> ' }
+                },
+            ]
+            });
+
+            })
+        })
+    </script>
+}

@@ -1,0 +1,174 @@
+﻿@model WebApplication.Models.DealerPersons
+@{
+    ViewBag.Title = "編輯據點人員";
+    ViewBag.icon = "fa fa-cog";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Forms/Advanced/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/timepicker/css")
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="col-xs-8">
+    <div class="">
+        @using (Html.BeginForm("UpdatePersonInProgress", "Dealer", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <input type="hidden" value="@Model.seq" name="seq" />
+            <div class="form-group has-feedback" style="padding-bottom:40px">
+                <label for="inputEmail3" class="col-sm-2 control-label">姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "姓名" })
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:40px">
+                <label for="inputEmail3" class="col-sm-2 control-label">手機<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.mobile, new { @class = "form-control", placeholder = "手機" })
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:40px">
+                <label for="inputEmail3" class="col-sm-2 control-label">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
+                </div>
+            </div>
+
+            <div class="" style="padding-bottom:40px">
+                <input type="hidden" name="seq" value="@Model.seq" />
+                <label for="inputEmail3" class="col-sm-2 control-label">地區<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="area">
+                        <option value="">==請選擇地區==</option>
+                        <option value="基隆市" @if (Model.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                        <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                        <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                        <option value="桃園市" @if (Model.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                        <option value="新竹市" @if (Model.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                        <option value="新竹縣" @if (Model.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                        <option value="苗栗縣" @if (Model.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                        <option value="台中市" @if (Model.area == "台中市") { <text> selected</text>}>台中市</option>
+                        <option value="彰化縣" @if (Model.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                        <option value="南投縣" @if (Model.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                        <option value="雲林縣" @if (Model.area == "雲林縣") { <text> selected</text>}>雲林縣</option>
+                        <option value="嘉義市" @if (Model.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                        <option value="嘉義縣" @if (Model.area == "嘉義縣") { <text> selected</text>}>嘉義縣</option>
+                        <option value="台南市" @if (Model.area == "台南市") { <text> selected</text>}>台南市</option>
+                        <option value="高雄市" @if (Model.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                        <option value="屏東縣" @if (Model.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                        <option value="台東縣" @if (Model.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                        <option value="花蓮縣" @if (Model.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                        <option value="宜蘭縣" @if (Model.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:40px">
+                <label for="inputEmail3" class="col-sm-2 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="dealer" id="dealer"  onchange="GetBusinessOffice()">
+                        <option value="">==請選擇經銷商==</option>
+                        <option value="裕信" @if (Model.dealer == "裕信") { <text> selected</text>}>裕信</option>
+                        <option value="誠隆" @if (Model.dealer == "誠隆") { <text> selected</text>}>誠隆</option>
+                        <option value="元隆" @if (Model.dealer == "元隆") { <text> selected</text>}>元隆</option>
+                        <option value="裕新" @if (Model.dealer == "裕新") { <text> selected</text>}>裕新</option>
+                        <option value="裕唐" @if (Model.dealer == "裕唐") { <text> selected</text>}>裕唐</option>
+                        <option value="匯聯" @if (Model.dealer == "匯聯") { <text> selected</text>}>匯聯</option>
+                        <option value="裕民" @if (Model.dealer == "裕民") { <text> selected</text>}>裕民</option>
+                        <option value="國通" @if (Model.dealer == "國通") { <text> selected</text>}>國通</option>
+                        <option value="裕昌" @if (Model.dealer == "裕昌") { <text> selected</text>}>裕昌</option>
+                        <option value="連誠" @if (Model.dealer == "連誠") { <text> selected</text>}>連誠</option>
+                        <option value="元智" @if (Model.dealer == "元智") { <text> selected</text>}>元智</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:40px">
+                <label for="inputEmail3" class="col-sm-2 control-label">營業所名稱<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="businessOffice" id="businessOffice">
+                        @foreach (var item in (List<string>)TempData["businessOffice"])
+                        { 
+                        <option value="@item" @if (Model.businessOffice == item) { <text> selected</text>}>@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-xs-4">
+                    @if (TempData["UpdateRight"].ToString() == "True")
+                    {
+                        <button type="submit" class="btn btn-primary ">修改</button>
+                    }
+                    @if (TempData["DeleteRight"].ToString() == "True")
+                    {
+                        <a class="btn btn-danger" href="@Url.Action("DeletePerson", "Dealer", new { seq = Model.seq })" onclick="return confirm('是否確定刪除')">刪除</a>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+    @Scripts.Render("~/AdminLTE/plugins/input-mask/js")
+    @Scripts.Render("~/AdminLTE/plugins/momentjs/js")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/colorpicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/timepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/icheck/js")
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+
+<script>
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "經銷據點人員管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        function GetBusinessOffice() {
+            var dealerName = $('#dealer').find(":selected").val();;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetBusinessOffice", "Dealer")',
+                data: { dealerName: dealerName },
+                success: function (data) {
+                    var list = data.list;
+                    console.log(data);
+                    $('#businessOffice').empty();
+                    $.each(list, function (index, item) {
+                        $('#businessOffice').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        }
+</script>
+}
+
+

@@ -1,0 +1,533 @@
+﻿
+@{
+    ViewBag.Title = "案件總覽";
+    ViewBag.icon = "fa fa-pie-chart";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Tables/Data/menu")
+    @Scripts.Render("~/Scripts/Home/DashboardV2/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+@Styles.Render("~/AdminLTE/plugins/daterangepicker/css")
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css" />
+
+<style>
+    th, td {
+        white-space: nowrap;
+    }
+    .search-row .form-group{
+        line-height: 34px;
+    }
+    .search-row .form-group .form-control{
+        float: right;
+    }
+</style>
+@if (Html.getBrand(User.Identity.Name) == "NISSAN")
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #B72E2E;
+        }
+
+    </style>
+}
+else
+{
+    <style>
+        .pagination > .active > a {
+            background-color: #557DB8;
+        }
+
+    </style>
+}
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OKCreate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>新增成功!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "OKUpdate")
+    {
+        <br />
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>更新成功!!。</strong>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="row" style="padding-top:40px">
+    <div class="row" style="padding:0 20px 0 20px">
+        <div class="col-md-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">我想買車</span>
+                    <span class="info-box-number" id="visitOrder"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">我要賣車</span>
+                    <span class="info-box-number" id="carSell"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">轉購新車</span>
+                    <span class="info-box-number" id="transferToBuyNewCar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">車輛上架</span>
+                    <span class="info-box-number" id="carOnShelves"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="width:20%">
+            <div class="info-box">
+                <span class="info-box-icon bg-info" style="background-color: #4bc1cc"><i class="fa fa-envelope-o fa"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">車輛成交下架</span>
+                    <span class="info-box-number" id="carOnShelvesSell"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row search-row" style="padding:0 20px 0 20px">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>建立時間區間</label>
+                <input type="text" class="form-control pull-right" id="reservation">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>經銷商</label>
+                <select class="form-control" id="dealer">
+                    <option value="">不限</option>
+                    @foreach (var item in (List<string>)TempData["dealerOptions"])
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>中古車營業據點</label>
+                <select class="form-control" id="stronghold">
+                    <option value="">不限</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>分類</label>
+                <select class="form-control" id="category">
+                    <option value="">不限</option>
+                    <option value="我想買車">我想買車</option>
+                    <option value="我要賣車">我要賣車</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="col-xs-12 " style="text-align:right">
+        <div class="box-body">
+            <button class="btn btn-primary" onclick="filterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>資料篩選</button>
+            <button class="btn btn-primary" onclick="resetFilterData()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>重設篩選</button>
+            @if (TempData["ExportRight"].ToString() == "True")
+            {
+                <a class="btn btn-primary" href="#" onclick="ExportCsv()" @Html.Raw(Html.getBrand(User.Identity.Name) == "NISSAN" ? "style='background-color:#B72E2E;color:white'" : "style='background-color:#557DB8;color:white'")>下載報表</a>
+            }
+        </div>
+        
+    </div>
+    <div class="col-xs-12">
+        <div class="">
+            @*<div class="box-header">
+                    <h3 class="box-title">Data Table With Full Features</h3>
+                </div>*@
+            <div class="box-body">
+                <table id="caseTable" class="table table-bordered table-striped" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%">分類</th>
+                            <th style="width: 7%">建立時間</th>
+                            <th style="width: 10%">編號</th>
+                            <th style="width: 5%">經銷商</th>
+                            <th style="width: 10%">中古車<br />營業據點</th>
+                            <th style="width: 10%">會員姓名</th>
+                            <th style="width: 10%">手機</th>
+                            <th style="width: 10%">指定<br />銷售顧問</th>
+                            <th style="width: 10%">負責<br />銷售顧問</th>
+                            <th style="width: 7%">狀態</th>
+                            <th style="width: 7%">金流</th>
+                            <th style="width: 7%">最後更新</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
+
+    <script>
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "案件總覽") {
+                navItem.addClass('active');
+            }
+        });
+
+        $(function () {
+
+            //Date range picker
+            $('#reservation').daterangepicker({
+                "locale": {
+                    "format": 'YYYY-MM-DD',//日期格式
+                    separator: ' ~ ',
+                    "applyLabel": "確認",
+                    cancelLabel: "取消",
+                    resetLabel: "重置",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],//汉化处理
+                    "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#caseTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                order: [[1, 'desc']],
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetCaseData", "CaseMgt")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": '', "strongholdFilter": '', "category": ''}
+            },
+            "columns": [
+                { "data": "category", "name": "分類" },
+                {
+                    "data": "createTime", "name": "上架", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "shopNo", "name": "編號" },
+                { "data": "dealer", "name": "經銷商" },
+                { "data": "stronghold", "name": "中古車營業據點" },
+                { "data": "member", "name": "會員姓名" },
+                { "data": "mobile", "name": "手機" },
+                { "data": "assignedConsulant", "name": "指定銷售顧問" },
+                { "data": "serveConsulant", "name": "負責銷售顧問" },
+                { "data": "status", "name": "狀態" },
+                { "data": "cashFlow", "name": "金流" },
+                {
+                    "data": "updateTime", "name": "最後更新", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+            ]
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "CaseMgt")',
+                data: { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val() },
+                success: function (data) {
+                    console.log(data);
+                    $("#visitOrder").text(data.visitOrder);
+                    $("#carSell").text(data.carSell);
+                    $('#transferToBuyNewCar').text(data.transferToBuyNewCar);
+                    $('#carOnShelves').text(data.carOnShelves);
+                    $('#carOnShelvesSell').text(data.carOnShelvesSell);
+                }
+            })
+
+
+            //$('#shopTable_filter').hide();
+
+            oTable = $('#caseTable').DataTable();
+            $('#search').bind("keyup blur", function () {
+                var dealer = $('#dealer').find(":selected").val();
+                var stronghold = $('#stronghold').find(":selected").val();
+                var category = $('#category').find(":selected").val();
+                $('#caseTable').DataTable().destroy();
+                $('#caseTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                order: [[1, 'desc']],
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetCaseData", "CaseMgt")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": stronghold, "category": category}
+            },
+            "columns": [
+                { "data": "category", "name": "分類" },
+                {
+                    "data": "createTime", "name": "上架", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "shopNo", "name": "編號" },
+                { "data": "dealer", "name": "經銷商" },
+                { "data": "stronghold", "name": "中古車營業據點" },
+                { "data": "member", "name": "會員姓名" },
+                { "data": "mobile", "name": "手機" },
+                { "data": "assignedConsulant", "name": "指定銷售顧問" },
+                { "data": "serveConsulant", "name": "負責銷售顧問" },
+                { "data": "status", "name": "狀態" },
+                { "data": "cashFlow", "name": "金流" },
+                {
+                    "data": "updateTime", "name": "最後更新", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+            ]
+            });
+
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "CaseMgt")',
+                data: { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": '', "status": status, "category": category },
+                success: function (data) {
+                    console.log(data);
+                    $("#visitOrder").text(data.visitOrder);
+                    $("#carSell").text(data.carSell);
+                    $('#transferToBuyNewCar').text(data.transferToBuyNewCar);
+                    $('#carOnShelves').text(data.carOnShelves);
+                    $('#carOnShelvesSell').text(data.carOnShelvesSell);
+                }
+            })
+
+            })
+        })
+
+
+        $('#dealer').bind("keyup blur change", function () {
+            var dealer = $('#dealer').find(":selected").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStronghold", "CarMgt")',
+                data: { dealer: dealer },
+                success: function (data) {
+                    console.log(data);
+                    $('#stronghold').empty();
+
+                    $('#stronghold').append("<option value=''>不限</option>")
+                    $.each(data, function (index, item) {
+                        $('#stronghold').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+
+        });
+
+        function resetFilterData() {
+            $('#reservation').val('');
+            $('#search').val('');
+            $("#dealer").val("").change();
+            $("#stronghold").empty();
+            $('#stronghold').append("<option value=''>不限</option>")
+            $("#category").val("").change();
+
+            filterData();
+        }
+
+        function filterData() {
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            var category = $('#category').find(":selected").val();
+            $('#caseTable').DataTable().destroy();
+                $('#caseTable')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+                scrollX: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                order: [[1, 'desc']],
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("GetCaseData", "CaseMgt")",
+                "type": "POST",
+                "data": { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": stronghold, "category": category}
+            },
+            "columns": [
+                { "data": "category", "name": "分類" },
+                {
+                    "data": "createTime", "name": "上架", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "shopNo", "name": "編號" },
+                { "data": "dealer", "name": "經銷商" },
+                { "data": "stronghold", "name": "中古車營業據點" },
+                { "data": "member", "name": "會員姓名" },
+                { "data": "mobile", "name": "手機" },
+                { "data": "assignedConsulant", "name": "指定銷售顧問" },
+                { "data": "serveConsulant", "name": "負責銷售顧問" },
+                { "data": "status", "name": "狀態" },
+                { "data": "cashFlow", "name": "金流" },
+                {
+                    "data": "updateTime", "name": "最後更新", "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+            ]
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatistics", "CaseMgt")',
+                data: { "Keyword": $('#search').val(), "dateFilter": $('#reservation').val(), "dealerFilter": dealer, "strongholdFilter": stronghold, "status": status, "category": category},
+                success: function (data) {
+                    console.log(data);
+                    $("#visitOrder").text(data.visitOrder);
+                    $("#carSell").text(data.carSell);
+                    $('#transferToBuyNewCar').text(data.transferToBuyNewCar);
+                    $('#carOnShelves').text(data.carOnShelves);
+                    $('#carOnShelvesSell').text(data.carOnShelvesSell);
+                }
+            })
+        }
+
+        function ExportCsv() {
+            var status = $('#status').find(":selected").val();
+            var dealer = $('#dealer').find(":selected").val();
+            var stronghold = $('#stronghold').find(":selected").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ExportCSV", "CaseMgt")',
+                data: { Keyword: $('#search').val(), dateFilter: $('#reservation').val(), dealerFilter: dealer, strongholdFilter: stronghold, status: status },
+                success: function (data) {
+                    if (data == "NO") {
+                        alert("無權限!!");
+                        return;
+                    }
+                    window.location.href = "@Url.Action("GetWord", "CaseMgt")";
+                }
+            })
+        }
+    </script>
+}

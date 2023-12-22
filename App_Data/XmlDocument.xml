@@ -1,0 +1,2107 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApplication</name>
+    </assembly>
+    <members>
+        <member name="M:WebApplication.Controllers.APCommonFun.Error(System.String)">
+            <summary>
+            紀錄錯誤訊息
+            </summary>
+            <param name="ErrorLog"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.DayAdd_0(System.String)">
+            <summary>
+            日 (dd)前面補0
+            </summary>
+            <param name="ConverStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.Transaction_ExecShopsSeq_MSSQL(System.Int64,System.Boolean)">
+            <summary>
+            交易模式，拿來寫入車輛管理流水號用的
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.Transaction_AddCarSellController_MSSQL(WebApplication.DataModels.AddCarSellDataInfo,System.Boolean)">
+            <summary>
+            交易模式，拿來寫入前端[我要賣車]用的
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.Transaction_PrepaidController_MSSQL(WebApplication.Models.PrepaidDataInfo,System.Boolean)">
+            <summary>
+            交易模式，拿來寫入前端[預付保留]用的
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.GetDataTable_MSSQL(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            參數化查詢
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.ExecSqlCommand_MSSQL(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            參數化執行
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.Call_imedtac_Api(Newtonsoft.Json.Linq.JArray,System.String,System.String)">
+            <summary>
+            呼叫-慧誠API 使用 (2022-05-03 Ben)
+            </summary>
+            <param name="jArray"></param>
+            <param name="imedtac_API_Base"></param>
+            <param name="imedtac_API_Url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.DateChangToEn(System.String)">
+            <summary>
+            日期轉換：MM/dd/yyyy to yyyy-MM-dd
+            </summary>
+            <param name="DateChang"></param>
+            <returns>usbs</returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.TimeChang(System.String)">
+            <summary>
+            時間轉換：HHmm to HH:mm
+            </summary>
+            <param name="TimeChangPara"></param>
+            <returns>usbs</returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.CheckNil(System.String)">
+            <summary>
+            確認欄位是否為nil
+            </summary>
+            <param name="Nil"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.APCommonFun.timeformat(System.String)">
+            <summary>
+            時間字串轉 hh:mm 格式 5/4 Jamie
+            </summary>
+            <param name="timeStr">傳入值</param>
+            <returns>newNumber</returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.AddNoticeRecordController.Post(WebApplication.ViewModels.Info_AddNoticeRecordModel)">
+            <summary>
+            新增車輛關注
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.AddBannerHitController.Post(WebApplication.ViewModels.Info_AddBannerHitModel)">
+            <summary>
+            新增Banner點擊數或曝光數
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApplication.Controllers.api.BaseAPIController">
+            <summary>
+            
+            </summary>    
+        </member>
+        <member name="P:WebApplication.Controllers.api.BaseAPIController.JWT">
+            <summary>
+            從token解析出來的JWT資訊
+            </summary>
+        </member>
+        <member name="P:WebApplication.Controllers.api.BaseAPIController.RequestToken">
+            <summary>
+            取得Request內的token
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.BaseAPIController.ReturnOK">
+            <summary>
+            API-成功回傳
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.BaseAPIController.ReturnOK(System.Object)">
+            <summary>
+            API-成功回傳
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.BaseAPIController.ReturnError(System.String)">
+            <summary>
+            API-失敗回傳
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.BaseAPIController.ReturnException">
+            <summary>
+            API-異常回傳
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.BaseAPIController.ReturnException(System.String)">
+            <summary>
+            API-異常回傳
+            </summary>
+        </member>
+        <member name="T:WebApplication.Controllers.api.GetReleaseCarModelController">
+            <summary>
+            取得上架中的車款
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetReleaseCarModelController.Get(System.String)">
+            <summary>
+            取得上架中的車款
+            </summary>
+            <param name="brand">品牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PayCallbackController.Get(System.String,System.String)">
+            <summary>
+            支付
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PayController.Post(System.String)">
+            <summary>
+            支付
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PayController.GetDealersKey(System.String)">
+            <summary>
+            取得金流key
+            </summary>
+            <param name="dealerName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.CancelCarSubscriptionController.Get(System.Int32)">
+            <summary>
+            取消車輛訂閱
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.CarCompareController.Post(WebApplication.ViewModels.Info_CarCompareModel)">
+            <summary>
+            取得車輛比較
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.CarSubscriptionController.Post(WebApplication.ViewModels.Info_CarSubscriptionModel)">
+            <summary>
+            車輛通知訂閱
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.AddCarSellController.Post">
+            <summary>
+            我要賣車 參數以form-data傳入
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.AddCarSellController.CheckData(System.Net.Http.MultipartFormDataStreamProvider)">
+            <summary>
+            檢查資料
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.DeleteNoticeRecordController.Post(WebApplication.ViewModels.Info_AddNoticeRecordModel)">
+            <summary>
+            移除車輛關注
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetCarCompareController.Post(WebApplication.ViewModels.Info_GetCarCompareModel)">
+            <summary>
+            取得比較車輛數量
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetCarShopController.Post(WebApplication.ViewModels.Info_GetCarShopModel)">
+            <summary>
+            取得車輛出售資訊
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetCarSubscriptionController.Post(WebApplication.ViewModels.Info_GetCarSubscriptionModel)">
+            <summary>
+            取得訂閱車輛
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetDealerPersonsController.Post(WebApplication.ViewModels.Info_GetDealerPersonsModel)">
+            <summary>
+            取得銷售顧問
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetDealersController.Post(WebApplication.ViewModels.Info_DealerModel)">
+            <summary>
+            取得經銷商資料
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetBannerController.Post(WebApplication.ViewModels.Info_BannerModel)">
+            <summary>
+            取得Banner
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetMonthlyHitController.Post(WebApplication.ViewModels.Info_GetMonthlyHitModel)">
+            <summary>
+            取得本月主打
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetNewsController.Post(WebApplication.ViewModels.Info_NewsModel)">
+            <summary>
+            取得最新消息列表
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetNewsOneController.Post(WebApplication.ViewModels.Info_NewsOneModel)">
+            <summary>
+            取得一篇最新消息
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetNoticeRecordController.Post(WebApplication.ViewModels.Info_GetNoticeRecordModel)">
+            <summary>
+            取得關注車輛
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.GetOtpAndSendSmsController.Post(WebApplication.ViewModels.Info_GetOtpAndSendSmsModel)">
+            <summary>
+            取得OTP並發送簡訊
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.MyFavouriteAddController.Post(WebApplication.ViewModels.Info_MyFavouriteAddModel)">
+            <summary>
+            加入我的最愛
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.MyFavouriteDeleteController.Post(WebApplication.ViewModels.Info_MyFavouriteDeleteModel)">
+            <summary>
+            移除我的最愛
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.MyFavouriteListController.Post(WebApplication.ViewModels.Info_MyFavouriteListModel)">
+            <summary>
+            取得我的最愛
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PrepaidController.Post(WebApplication.ViewModels.Info_PrepaidModel)">
+            <summary>
+            預付保留
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PrepaidsController.GetAsync(WebApplication.ViewModels.Info_GetPrepaidDataModelByBrand)">
+            <summary>
+            預付保留列表
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.PrepaidsController.GetByIdAsync(System.String,WebApplication.ViewModels.Info_GetPrepaidDataModel)">
+            <summary>
+            預付保留查詢
+            </summary>
+            <param name="prepaidNo"></param>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.RefundController.Post(System.String,WebApplication.ViewModels.Info_UpdatePrepaidModel)">
+            <summary>
+            更新預付保留狀態
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.SearchCarController.Post(WebApplication.ViewModels.Info_SearchCarModel)">
+            <summary>
+            取得車輛出售資訊
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.ShopController.CheckOnline(WebApplication.ViewModels.Info_GetShopModel)">
+            <summary>
+            檢查車輛是否上架中
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.VerifyOtpController.Post(WebApplication.ViewModels.Info_VerifyOtpModel)">
+            <summary>
+            OTP驗證
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApplication.Controllers.api.VerifyReCaptchaController">
+            <summary>
+            驗證reCaptcha
+            </summary>
+        </member>
+        <member name="T:WebApplication.Controllers.api.VerifyReCaptchaController.VerifyReCaptchaParameter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApplication.Controllers.api.VerifyReCaptchaController.VerifyReCaptchaParameter.token">
+            <summary>
+            前端送來的token
+            </summary>
+        </member>
+        <member name="M:WebApplication.Controllers.api.VerifyReCaptchaController.Post(WebApplication.Controllers.api.VerifyReCaptchaController.VerifyReCaptchaParameter)">
+            <summary>
+            驗證reCaptcha
+            </summary>
+            <param name="brand">品牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.VisitOrderController.Post(WebApplication.ViewModels.Info_VisitOrderModel)">
+            <summary>
+            預約賞車
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.api.VisitOrderVerifyMobileController.Post(WebApplication.ViewModels.Info_VisitOrderVerifyMobileModel)">
+            <summary>
+            預約賞車手機號碼驗證
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.CarMgtController.IsOver_CarConditionLimit(WebApplication.Models.Shops,System.Int32)">
+            <summary>
+            上傳中 或 資料庫中的照片要超過限定張數
+            </summary>
+            <param name="shop"></param>
+            <param name="limit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.CarMgtController.IsUpload_InspectionTable(WebApplication.Models.Shops)">
+            <summary>
+            是否已經上傳審查表
+            </summary>
+            <param name="shop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.CarMgtController.GetUserAndSendMail(WebApplication.Models.Shops,WebApplication.DataModels.EnumRoleName,System.Int32)">
+            <summary>
+            找出要寄信給誰
+            </summary>
+            <param name="shop"></param>
+            <param name="enumRoleName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.CarSellController.GetActiveToken">
+            <summary>
+            取得oneid登入後的token        
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.MemberController.GetActiveToken">
+            <summary>
+            取得oneid登入後的token        
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.MemberController.GetMemberList">
+            <summary>
+            取得使用者列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Controllers.MemberController.GetAllMemberList">
+            <summary>
+            取得全部使用者列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApplication.DataModels.EnumApiStatus">
+            <summary>
+            API回傳狀態代碼
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Ok">
+            <summary>
+            API回傳成功
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_400">
+            <summary>
+            API回傳失敗
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_401">
+            <summary>
+            API回傳失敗(db找不到該帳號資料)
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_402">
+            <summary>
+            API回傳失敗(帳號停用)
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_403">
+            <summary>
+            API回傳失敗(禁止異地登入(AToken相同))
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_404">
+            <summary>
+            API回傳失敗(禁止異地登入(RToken相同))
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Error_405">
+            <summary>
+            該號碼已註冊，請重新登入
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.Exception">
+            <summary>
+            API回傳失敗(系統錯誤)
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.ErrorToken">
+            <summary>
+            Token異常
+            </summary>
+        </member>
+        <member name="F:WebApplication.DataModels.EnumApiStatus.NeedRefreshToken">
+            <summary>
+            需要更新Token
+            </summary>
+        </member>
+        <member name="T:WebApplication.DataModels.EnumRoleName">
+            <summary>
+            使用者角色名稱
+            </summary>
+        </member>
+        <member name="T:WebApplication.DataModels.ApiJWT">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiJWT.Member_seq">
+            <summary>
+            使用者seq
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiJWT.Member_mail">
+            <summary>
+            使用者mail
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiJWT.Brand">
+            <summary>
+            所屬品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiJWT.Expires">
+            <summary>
+            Token到期時間
+            </summary>
+        </member>
+        <member name="T:WebApplication.DataModels.ApiResult`1">
+            <summary>
+            API呼叫時，傳回的統一物件
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiResult`1.StatusCode">
+            <summary>
+            結果代碼(200=成功，其餘為錯誤代號)
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiResult`1.Message">
+            <summary>
+            錯誤訊息
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.ApiResult`1.Data">
+            <summary>
+            資料本體
+            </summary>
+        </member>
+        <member name="M:WebApplication.DataModels.ApiResult`1.#ctor">
+            <summary>
+            ApiResult
+            </summary>
+        </member>
+        <member name="M:WebApplication.DataModels.ApiResult`1.#ctor(WebApplication.DataModels.EnumApiStatus,System.String,`0)">
+            <summary>
+            ApiResult
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.yearOfManufacture">
+            <summary>
+            西元年
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.monthOfManufacture">
+            <summary>
+            月份
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.milage">
+            <summary>
+            使用里程
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.carBrand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.otherBrand">
+            <summary>
+            品牌-選擇其他時手動填入的品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.carModel">
+            <summary>
+            車型
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.licensePlate">
+            <summary>
+            車牌號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.area">
+            <summary>
+            中古車營業據點-地區
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.dealer">
+            <summary>
+            中古車營業據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.dealerName">
+            <summary>
+            新車營業據點(經銷商名稱)
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.newDealerSeq">
+            <summary>
+            新車營業據點(seq)
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.mobile">
+            <summary>
+            客戶-手機
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.name">
+            <summary>
+            客戶-名稱
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.title">
+            <summary>
+            客戶-尊稱
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.birthday">
+            <summary>
+            客戶-生日
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.email">
+            <summary>
+            客戶-電子信箱
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.needConsult">
+            <summary>
+            我同意接受新車諮詢服務
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.newCarConsultant">
+            <summary>
+            新車銷售顧問
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.newCarDealer">
+            <summary>
+            新車營業據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.licensePicture">
+            <summary>
+            行照
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.ReturnErr">
+            <summary>
+            紀錄檢查資料時的錯誤訊息
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.SellNo">
+            <summary>
+            寫入資料庫後回傳的流水號
+            </summary>
+        </member>
+        <member name="P:WebApplication.DataModels.AddCarSellDataInfo.Sells_seq">
+            <summary>
+            寫入資料庫後回傳的seq
+            </summary>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.OnActionExecuting(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.GetToken(System.String)">
+            <summary>
+            Token解密
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.AuthRefresh(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            要求更新token
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.TokenError(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            token異常
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.OneidAPIError(System.Web.Http.Controllers.HttpActionContext,WebApplication.DataModels.EnumApiStatus,System.String)">
+            <summary>
+            OneidAPI-回傳異常或資料錯誤
+            </summary>
+            <param name="actionContext"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:WebApplication.Extensions.JwtAuthActionFilter.WithoutVerifyToken(System.String)">
+            <summary>
+            需要排除的API
+            </summary>
+            <param name="requestUri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_02(WebApplication.Models.Shops,System.String)">
+            <summary>
+            email 通知經銷商管理員
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_03(WebApplication.Models.Shops,System.String)">
+            <summary>
+            email 通知品牌管理員
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_04(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-上架通過
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_05(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-上架退回
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_06(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-成交下架通過
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_07(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-非成交下架通過
+            </summary>
+            <param name="shop"></param>
+            <param name="mailAddress"></param>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_08(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-下架退回
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_09(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_10(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知經銷商管理員-成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_11(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知據點管理人員-非成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_12(WebApplication.Models.Shops,System.String)">
+            <summary>
+            通知經銷商管理員-非成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_13(WebApplication.Models.Shops,System.String)">
+            <summary>
+            上架申請
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_14(WebApplication.Models.Shops,System.String)">
+            <summary>
+            上架申請-通知經銷商管理員
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_15(WebApplication.Models.Shops,System.String)">
+            <summary>
+            上架通過-通知經銷商管理員
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_16(WebApplication.Models.Shops,System.String)">
+            <summary>
+            上架通過-通知據點管理人員
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_17(WebApplication.Models.Shops,System.String)">
+            <summary>
+            上架退回
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_18(WebApplication.Models.Shops,System.String)">
+            <summary>
+            成交下架通過
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_19(WebApplication.Models.Shops,System.String)">
+            <summary>
+            非成交下架通過
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_20(WebApplication.Models.Shops,System.String)">
+            <summary>
+            下架退回
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_21(WebApplication.Models.Shops,System.String)">
+            <summary>
+            成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_22(WebApplication.Models.Shops,System.String)">
+            <summary>
+            成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_23(WebApplication.Models.Shops,System.String)">
+            <summary>
+            成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_24(WebApplication.Models.Shops,System.String)">
+            <summary>
+            成交下架
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.CarMgtService.MailSend_25(WebApplication.Models.Shops,System.String,System.String[],System.String[],System.String[],System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.EmailService.GetUserMail(System.String,System.String,System.String,System.String)">
+            <summary>
+            取得後台人員的Mail列表
+            </summary>
+            <param name="roleName">角色名 ex:據點管理人員</param>
+            <param name="brand">品牌 ex:NISSAN</param>
+            <param name="company">經銷商 ex:匯聯</param>
+            <param name="department">據點 ex:博賢所</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.EmailService.GetUserMail(System.String,System.String,System.String)">
+            <summary>
+            取得後台人員的Mail列表
+            </summary>
+            <param name="roleName">角色名 ex:據點管理人員</param>
+            <param name="brand">品牌 ex:NISSAN</param>
+            <param name="department">據點 ex:博賢所</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.SaveAsBlob(System.Web.HttpPostedFileBase,System.String,System.String)">
+            <summary>
+            儲存到Azure Blob
+            </summary>
+            <param name="file">圖檔</param>
+            <param name="folderPath">額外資料夾</param>
+            <param name="fileHeaderChar">新檔名前置字元</param>
+            <returns>回傳檔案完整路徑</returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.SaveAsBlob(System.Net.Http.MultipartFileData,System.String,System.String)">
+            <summary>
+            儲存到Azure Blob
+            </summary>
+            <param name="file">圖檔</param>
+            <param name="folderPath">額外資料夾</param>
+            <param name="fileHeaderChar">新檔名前置字元</param>
+            <returns>回傳檔案完整路徑</returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.DeleteBlob(System.String)">
+            <summary>
+            刪除 azure blob 檔案
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.GetRealUrl(System.String)">
+            <summary>
+            檔案實際路徑(blob)
+            </summary>
+            <param name="blobFilePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.CreateUniqueName(System.Net.Http.MultipartFileData,System.String)">
+            <summary>
+            建立唯一檔名
+            </summary>
+            <param name="file"></param>
+            <param name="fileHeaderChar">新檔名前置字元</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.FileService.CreateUniqueName(System.Web.HttpPostedFileBase,System.String)">
+            <summary>
+            建立唯一檔名
+            </summary>
+            <param name="file"></param>
+            <param name="fileHeaderChar">新檔名前置字元</param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApplication.Services.JwtService">
+            <summary>
+            JwtToken 生成功能
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.JwtService.DecryptActiveToken(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            解密 JwtToken
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApplication.Services.OneidService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMember(System.String)">
+            <summary>
+            取得使用者資料(token主人的資料)
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMember(System.String,System.String)">
+            <summary>
+            取得指定使用者資料
+            </summary>
+            <param name="token"></param>
+            <param name="member_seq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMemberByMobile(System.String,System.String)">
+            <summary>
+            取得指定使用者資料
+            </summary>
+            <param name="token"></param>
+            <param name="member_mobile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMemberList(System.String,System.String)">
+            <summary>
+            取得使用者資料
+            </summary>
+            <param name="token"></param>
+            <param name="brand"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMemberList(System.String)">
+            <summary>
+            取得全部使用者資料
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.GetMembersBehavior(System.String,System.Int64)">
+            <summary>
+            GetMembersBehavior
+            </summary>
+            <param name="token"></param>
+            <param name="member_seq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.Login(System.String,System.String)">
+            <summary>
+            登入
+            </summary>
+            <param name="account"></param>
+            <param name="password"></param>
+            <returns>只取回ActiveToken</returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.UpdateMemberLog(System.String,System.Int64,System.String,System.String)">
+            <summary>
+            更新使用者操作紀錄
+            </summary>
+            <param name="token"></param>
+            <param name="member_seq">使用者seq</param>
+            <param name="behavior">使用者行為紀錄</param>
+            <param name="brand">使用者操作的品牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.UpdateMember(System.String,WebApplication.Services.OneidService.UpdateMemberParameter)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="para"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication.Services.OneidService.DeleteMember(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="mobile"></param>
+            <returns></returns>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddBannerHitModel.banner_id">
+            <summary>
+            Banner編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddBannerHitModel.type">
+            <summary>
+            類別(hit: 點擊數 / view: 曝光數)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.licensePlate">
+            <summary>
+            車牌號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.milage">
+            <summary>
+            里程數
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.yearOfManufacture">
+            <summary>
+            出廠年份
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.monthOfManufacture">
+            <summary>
+            出廠月份
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.carModel">
+            <summary>
+            車型
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.area">
+            <summary>
+            地區
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.dealer">
+            <summary>
+            中古車營業據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.salesRep">
+            <summary>
+            中古車銷售顧問
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.mobile">
+            <summary>
+            手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.title">
+            <summary>
+            稱謂
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.birthday">
+            <summary>
+            出生年月日
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddCarSellModel.needConsult">
+            <summary>
+            是否同意接受新車諮詢服務 (0/1)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddNoticeRecordModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddNoticeRecordModel.shopNo">
+            <summary>
+            產品編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddNoticeRecordModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_AddNoticeRecordModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_BannerModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_BannerModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_BannerModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CancelCarSubscriptionModel.token">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CancelCarSubscriptionModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CancelCarSubscriptionModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarCompareModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarCompareModel.brand">
+            <summary>
+                品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarCompareModel.seq">
+            <summary>
+                系統售車編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarCompareModel.user_id">
+            <summary>
+                會員系統編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.price">
+            <summary>
+            售價
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.licensePlate">
+            <summary>
+            車牌號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.licensePicture">
+            <summary>
+            行照(照片)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.milage">
+            <summary>
+            里程數
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.yearOfManufacture">
+            <summary>
+            出廠年份
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carModel">
+            <summary>
+            車種
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carType">
+            <summary>
+            車款
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.driveMode">
+            <summary>
+            驅動方式
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.transmissionType">
+            <summary>
+            變速箱形式
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.fuelType">
+            <summary>
+            燃料型態
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.displacement">
+            <summary>
+            排氣量
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.horsepower">
+            <summary>
+            馬力
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.outerColor">
+            <summary>
+            外觀顏色
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.innerColor">
+            <summary>
+            內裝顏色
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.feature">
+            <summary>
+            重點特色
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.dealer">
+            <summary>
+            經銷商
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.stronghold">
+            <summary>
+            據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.salesRep">
+            <summary>
+            業代
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carCondition1">
+            <summary>
+            車況照1
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carCondition2">
+            <summary>
+            車況照2
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carCondition3">
+            <summary>
+            車況照3
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.carCondition4">
+            <summary>
+            車況照4
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.otherCondition1">
+            <summary>
+            其他角度照1
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.otherCondition2">
+            <summary>
+            其他角度照2
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.contact">
+            <summary>
+            聯絡方式
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarShopModel.creator">
+            <summary>
+            建立者
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.token">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.driveMode">
+            <summary>
+            驅動方式
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.carType">
+            <summary>
+            車種
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.carModel">
+            <summary>
+            車型
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.outerColor">
+            <summary>
+            顏色
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.area">
+            <summary>
+            所在區域
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.dealer">
+            <summary>
+            中古車營業據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.price">
+            <summary>
+            價格
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.yearOfManufacture">
+            <summary>
+            出廠年份
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.milage">
+            <summary>
+            里程數
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_CarSubscriptionModel.email">
+            <summary>
+            會員email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ChangePasswordModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ChangePasswordModel.old_password">
+            <summary>
+                舊密碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ChangePasswordModel.password">
+            <summary>
+                新密碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ChangePasswordModel.confirm_password">
+            <summary>
+                新密碼確認
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ChangePasswordModel.user_id">
+            <summary>
+                系統使用者代碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.areas">
+            <summary>
+            地區
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.type">
+            <summary>
+            中古或新車
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.dealer_id">
+            <summary>
+            經銷商id (若空白則回傳全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DealerModel.dealer_name">
+            <summary>
+            經銷商名稱 (非必填，搭配type=new查詢)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DeleteMemberModel.mobile">
+            <summary>
+                手機
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DownloadFileModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DownloadFileModel.filePath">
+            <summary>
+            檔名
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_DownloadFileModel.contentType">
+            <summary>
+            檔案類型
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.name">
+            <summary>
+                姓名
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.id">
+            <summary>
+                身分證
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.mobile">
+            <summary>
+                手機
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.email">
+            <summary>
+                email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.title">
+            <summary>
+                職稱
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.birthday">
+            <summary>
+                出生年月日
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.area">
+            <summary>
+                居住地區
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.address">
+            <summary>
+                居住地址
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.interestedCar">
+            <summary>
+                興趣車款
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_EditUserInfoModel.user_id">
+            <summary>
+                系統使用者代碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ForgetPasswordModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ForgetPasswordModel.method">
+            <summary>
+                透過手機簡訊或Email 收到臨時密碼 (S:簡訊，M:Email)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ForgetPasswordModel.email">
+            <summary>
+                Email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_ForgetPasswordModel.brand">
+            <summary>
+                品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_FormLoginModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_FormLoginModel.mobile">
+            <summary>
+                手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_FormLoginModel.password">
+            <summary>
+                密碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_FormLogoutModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_FormLogoutModel.mobile">
+            <summary>
+                手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarCompareModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarCompareModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarCompareModel.user_id">
+            <summary>
+            會員編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.brand">
+            <summary>
+                品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.seq">
+            <summary>
+                系統售車編號(若無傳入則回傳全部資料)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.dealer">
+            <summary>
+                經銷商(若無傳入則回傳全部資料)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarShopModel.stronghold">
+            <summary>
+                據點(若無傳入則回傳全部資料)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarSubscriptionModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarSubscriptionModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetCarSubscriptionModel.user_id">
+            <summary>
+            會員編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.dealer">
+            <summary>
+            經銷商
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.stronghold">
+            <summary>
+            據點
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetDealerPersonsModel.dealerPerson_id">
+            <summary>
+            銷售顧問id (若空白則回傳全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetLoginStatusModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetLoginStatusModel.mobile">
+            <summary>
+                手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetMonthlyHitModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetMonthlyHitModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetMonthlyHitModel.seq">
+            <summary>
+            系統售車編號(若無傳入則回傳全部資料)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetNoticeRecordModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetNoticeRecordModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetNoticeRecordModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetNoticeRecordModel.user_id">
+            <summary>
+            會員系統編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetNoticeRecordModel.getCount">
+            <summary>
+                取得筆數 (Y / N)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetOtpAndSendSmsModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetOtpAndSendSmsModel.mobile">
+            <summary>
+                手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetOtpAndSendSmsModel.brand">
+            <summary>
+                品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetOtpAndSendSmsModel.type">
+            <summary>
+                種類 (register: 註冊，sell: 我要賣車)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetPrepaidDataModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetPrepaidDataModelByBrand.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetShopModel.ShopSeqList">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetUserInfoModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_GetUserInfoModel.mobile">
+            <summary>
+                手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteAddModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteAddModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteAddModel.carShop_id">
+            <summary>
+            車輛銷售id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteDeleteModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteDeleteModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteDeleteModel.carShop_id">
+            <summary>
+            車輛銷售id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteListModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_MyFavouriteListModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsOneModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsOneModel.seq">
+            <summary>
+            news id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_NewsOneModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_PrepaidModel.shopNo">
+            <summary>
+            賣車編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_PrepaidModel.user_id">
+            <summary>
+            會員編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_PrepaidModel.contactPeriod">
+            <summary>
+            方便連絡時段
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_PrepaidModel.others">
+            <summary>
+            其他需求
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_PrepaidModel.salesRep">
+            <summary>
+            服務專員
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_reCAPTCHAPostModel.token">
+            <summary>
+            從前端傳來的 token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_reCAPTCHAPostModel.ip">
+            <summary>
+            從前端傳來的 IP
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.token">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.page">
+            <summary>
+            頁數( 第幾頁+每頁幾筆，以逗點區隔，例 " 3,20 " ) (空白代表全部)
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.price">
+            <summary>
+            價格
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.milage">
+            <summary>
+            里程數
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.yearOfManufacture">
+            <summary>
+            出廠年份
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.carType">
+            <summary>
+            車種 ex. ["掀背車", "休旅車"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.carModel">
+            <summary>
+            車型 ex. ["Kicks", "Bluebird"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.area">
+            <summary>
+            車輛所在地 ex. ["台北市", "新北市"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.equipment">
+            <summary>
+            內外裝配備 ex. ["LED頭燈", "感應電動尾門"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.driveMode">
+            <summary>
+            驅動方式 ex. ["2WD", "4WD"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.color">
+            <summary>
+            顏色 ex. ["黑色", "紅色"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.feature">
+            <summary>
+            安全重點功能 ex. ["安全氣囊", "ICC智慧型全速域定速控制系統"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.dealer">
+            <summary>
+            中古車營業據點 ex. ["元隆-桃鶯展示中心", "誠隆-高雄展示中心"]
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_SearchCarModel.orderBy">
+            <summary>
+            排序方式  ex: 價格由低到高
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UpdatePrepaidModel.user_id">
+            <summary>
+            會員id
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UpdatePrepaidModel.reason">
+            <summary>
+            退訂原因
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.brand">
+            <summary>
+                品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.name">
+            <summary>
+                姓名
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.id">
+            <summary>
+                身分證
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.mobile">
+            <summary>
+                手機
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.email">
+            <summary>
+                Email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.title">
+            <summary>
+                職稱
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.birthday">
+            <summary>
+                出生年月日
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.area">
+            <summary>
+                居住區域
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.address">
+            <summary>
+                居住地址
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.interestedCar">
+            <summary>
+                興趣車款
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.password">
+            <summary>
+                密碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_UserRegister.confirm_password">
+            <summary>
+                確認密碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VerifyOtpModel.token">
+            <summary>
+                token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VerifyOtpModel.otp">
+            <summary>
+            OTP
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VerifyOtpModel.mobile">
+            <summary>
+            手機
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VerifyOtpModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.token">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.visitCarType">
+            <summary>
+            預約賞車款
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.visitCarYear">
+            <summary>
+            預約賞車年分
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.dealerName">
+            <summary>
+            聯絡經銷商
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.dealerAddress">
+            <summary>
+            經銷商地址
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.dealerTel">
+            <summary>
+            經銷商電話
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.mobile">
+            <summary>
+            手機號碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.title">
+            <summary>
+            稱謂
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.id">
+            <summary>
+            身分證
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.birthday">
+            <summary>
+            出生年月日
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.address">
+            <summary>
+            現居地址
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.salesRep">
+            <summary>
+            指定銷售顧問
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.others">
+            <summary>
+            其他需求
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.period">
+            <summary>
+            方便連絡時段
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.shopNo">
+            <summary>
+            產品編號
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.visitTime">
+            <summary>
+            預約時間
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderModel.brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderVerifyMobileModel.token">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderVerifyMobileModel.order_id">
+            <summary>
+            預約賞車代碼
+            </summary>
+        </member>
+        <member name="P:WebApplication.ViewModels.Info_VisitOrderVerifyMobileModel.code">
+            <summary>
+            驗證碼
+            </summary>
+        </member>
+    </members>
+</doc>

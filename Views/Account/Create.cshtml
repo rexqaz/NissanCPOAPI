@@ -1,0 +1,201 @@
+﻿@model WebApplication.Models.CreateUserViewModel
+@{
+    ViewBag.Title = "新增帳號";
+    ViewBag.icon = "fa fa-file-text";
+}
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @foreach (var item in (IEnumerable<ModelError>)TempData["MemberResult"])
+            {
+                <strong>@item.ErrorMessage</strong>
+            }
+        </div>
+    }
+}
+
+<div class="col-xs-8">
+    <div class="">
+        @using (Html.BeginForm("CreateInProgress", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @if (TempData["name"] != null)
+                    {
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "姓名", @Value= TempData["name"].ToString()})
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "姓名" })
+                    }
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">帳號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @if (TempData["name"] != null)
+                    {
+                        @Html.TextBoxFor(m => m.NameIdentifier, new { @class = "form-control", placeholder = "帳號", @Value = TempData["NameIdentifier"].ToString() })
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(m => m.NameIdentifier, new { @class = "form-control", placeholder = "帳號" })
+                    }
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">公司(法人)<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Company" id="Company" onchange="GetBusinessOffice()">
+                        <option value="">==請選擇公司(法人)==</option>
+                        <option value="裕隆日產汽車" @if (TempData["company"] != null && TempData["company"].ToString() == "裕隆日產汽車") {<text>selected</text> }>裕隆日產汽車</option>
+                        <option value="裕信" @if (TempData["company"] != null && TempData["company"].ToString() == "裕信") {<text>selected</text> }>裕信</option>
+                        <option value="誠隆" @if (TempData["company"] != null && TempData["company"].ToString() == "誠隆") {<text>selected</text> }>誠隆</option>
+                        <option value="元隆" @if (TempData["company"] != null && TempData["company"].ToString() == "元隆") {<text>selected</text> }>元隆</option>
+                        <option value="裕新" @if (TempData["company"] != null && TempData["company"].ToString() == "裕新") {<text>selected</text> }>裕新</option>
+                        <option value="裕唐" @if (TempData["company"] != null && TempData["company"].ToString() == "裕唐") {<text>selected</text> }>裕唐</option>
+                        <option value="匯聯" @if (TempData["company"] != null && TempData["company"].ToString() == "匯聯") {<text>selected</text> }>匯聯</option>
+                        <option value="裕民" @if (TempData["company"] != null && TempData["company"].ToString() == "裕民") {<text>selected</text> }>裕民</option>
+                        <option value="國通" @if (TempData["company"] != null && TempData["company"].ToString() == "國通") {<text>selected</text> }>國通</option>
+                        <option value="裕昌" @if (TempData["company"] != null && TempData["company"].ToString() == "裕昌") {<text>selected</text> }>裕昌</option>
+                        <option value="連誠" @if (TempData["company"] != null && TempData["company"].ToString() == "連誠") {<text>selected</text> }>連誠</option>
+                        <option value="元智" @if (TempData["company"] != null && TempData["company"].ToString() == "元智") {<text>selected</text> }>元智</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">部門<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Department" id="Department">
+                        @if (TempData["department"] != null)
+                        { 
+                        <option value="@TempData["department"].ToString()" selected>@TempData["department"].ToString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            @*<div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">手機<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", placeholder = "手機" })
+                </div>
+            </div>*@
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @if (TempData["name"] != null)
+                    {
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "帳號", @Value = TempData["Email"].ToString() })
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                    }
+                </div>
+                @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
+            </div>
+            @*<div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "輸入密碼" })
+                </div>
+                <div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "確認密碼" })
+                </div>*@
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">品牌<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="brand">
+                        <option value="NisNISSANsan">==請選擇品牌==</option>
+                        <option value="NISSAN" @if (TempData["brand"] != null && TempData["brand"].ToString() == "NISSAN") {<text>selected</text> }>NISSAN</option>
+                        <option value="INFINITI" @if (TempData["brand"] != null && TempData["brand"].ToString() == "INFINITI") {<text>selected</text> }>INFINITI</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">角色<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Role">
+                        @foreach (var item in Model.Roles)
+                        {
+                            <option value="@item.seq" @if (TempData["role"] != null && TempData["role"].ToString() == item.RoleName) {<text>selected</text> }>@item.RoleName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="status">
+                        <option value="False">==請選擇狀態==</option>
+                        <option value="True" @if (TempData["status"] != null && TempData["status"].ToString() == "True") {<text>selected</text> }>啟用</option>
+                        <option value="False" @if (TempData["status"] != null && TempData["status"].ToString() == "False") {<text>selected</text> }>停用</option>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">新增</button>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+
+    <script>
+    $(".sidebar-menu > li").each(function () {
+        var navItem = $(this);
+        if (navItem.find("a").find("span").text() == "後台帳號管理") {
+            navItem.addClass('active');
+        }
+    });
+
+    function GetBusinessOffice() {
+        var dealerName = $('#Company').find(":selected").val();
+        console.log(dealerName);
+        if (dealerName == "裕隆日產汽車") {
+            $('#Department').empty();
+            $('#Department').append("<option value='無'>無</option>")
+            $('#Department').append("<option value='MSD'>MSD</option>")
+            $('#Department').append("<option value='IBD'>IBD</option>")
+            $('#Department').append("<option value='DTO'>DTO</option>")
+            $('#Department').append("<option value='ISC'>ISC</option>")
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetBusinessOffice", "Dealer")',
+                data: { dealerName: dealerName, type: "old" },
+                success: function (data) {
+                    var list = data.list;
+                    console.log(data);
+                    $('#Department').empty();
+                    $('#Department').append("<option value='無'>無</option>")
+                    $.each(list, function (index, item) {
+                        $('#Department').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        }
+    }
+    </script>
+}

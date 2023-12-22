@@ -1,0 +1,217 @@
+﻿@model WebApplication.Models.Sells
+@{
+    ViewBag.Title = "車輛留單頁";
+    ViewBag.icon = "fa fa-folder-open";
+}
+
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+
+<form method="post" action="@Url.Action("CreateInProgress", "CarSell")" enctype="multipart/form-data" onsubmit="return confirm('是否確定新增?');">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">車主姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="owner" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">稱謂<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="title" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="email" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">連絡電話<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="mobile" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">車牌號碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="licensePlate" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">車型<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="carModel" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:20px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">地區<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <select class="form-control pull-right" name="area">
+                        <option value="台北市">台北市</option>
+                        <option value="新北市">新北市</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">出廠年月<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="yearMonthOfManufacture" type="text" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">方便連絡時段<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="contactPeriod" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">營業所<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <select class="form-control pull-right" name="dealer">
+                        @foreach (var item in (List<string>)TempData["dealerOptions"])
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">里程數<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="milage" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6" style="padding-bottom:30px">
+            <div class="form-group has-feedback">
+                <label for="inputEmail3" class="col-sm-3 control-label">排氣量<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-9">
+                    <input name="displacement" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12" style="padding-bottom:30px">
+            <div class="form-group has-feedback col-xs-6" style="margin-left:-10px">
+                <label for="inputEmail3" class="col-sm-3 control-label">指定業代</label>
+                <div class="col-sm-9">
+                    <input name="salesRep" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="padding-bottom:20px">
+            <div class="input-group">
+                <label for="inputEmail3" class="col-sm-4 control-label">車輛左前圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-8">
+                    <input id="carCondition1" name="carCondition1" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                    @*<img id="preview" src='' style="width:240px;">*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="padding-bottom:20px">
+            <div class="input-group">
+                <label for="inputEmail3" class="col-sm-4 control-label">車輛右前圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-8">
+                    <input id="carCondition2" name="carCondition2" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                    @*<img id="preview" src='' style="width:240px;">*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="padding-bottom:20px">
+            <div class="input-group">
+                <label for="inputEmail3" class="col-sm-4 control-label">車輛左後圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-8">
+                    <input id="carCondition3" name="carCondition3" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                    @*<img id="preview" src='' style="width:240px;">*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="padding-bottom:20px">
+            <div class="input-group">
+                <label for="inputEmail3" class="col-sm-4 control-label">車輛右後圖片<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-8">
+                    <input id="carCondition4" name="carCondition4" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                    @*<img id="preview" src='' style="width:240px;">*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="padding-bottom:20px">
+            <div class="input-group">
+                <label for="inputEmail3" class="col-sm-4 control-label">上傳行照<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-8">
+                    <input id="licensePicture" name="inspectionTable" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" />
+                    @*<img id="preview" src='' style="width:240px;">*@
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg" id="preview">
+            預覽
+        </button>
+        <button type="submit" class="btn btn-primary" style="padding-left:17px">儲存草稿</button>
+        <button type="submit" class="btn btn-primary" style="padding-left:17px">送審</button>
+    </div>
+
+</form>
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+
+    <script>
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "我要賣車") {
+                navItem.addClass('active');
+            }
+        });
+    </script>
+}

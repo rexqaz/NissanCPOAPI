@@ -1,0 +1,214 @@
+﻿@model WebApplication.Models.RegisterViewModel
+@{
+    ViewBag.Title = "修改帳號";
+    ViewBag.icon = "fa fa-file-text";
+}
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else if (TempData["MemberResult"].ToString() == "same")
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>密碼不得與前三次相同!!</strong>
+        </div>
+    }
+    else if (TempData["MemberUpdateFailed"] != null && TempData["MemberUpdateFailed"].ToString() == "true")
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()!!</strong>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @foreach (var item in (IEnumerable<ModelError>)TempData["MemberResult"])
+            {
+                <strong>@item.ErrorMessage</strong>
+            }
+        </div>
+    }
+}
+<div class="col-xs-8">
+    <div class="">
+        @using (Html.BeginForm("UpdateInProgress", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "姓名", @readonly = "true" })
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">帳號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.NameIdentifier, new { @class = "form-control", placeholder = "帳號", @readonly = "true" })
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">公司(法人)<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Company" id="Company" onchange="GetBusinessOffice()">
+                        <option value="">==請選擇經銷商==</option>
+                        <option value="裕隆日產汽車" @if (Model.Company == "裕隆日產汽車") { <text> selected</text>}>裕隆日產汽車</option>
+                        <option value="裕信" @if (Model.Company == "裕信") { <text> selected</text>}>裕信</option>
+                        <option value="誠隆" @if (Model.Company == "誠隆") { <text> selected</text>}>誠隆</option>
+                        <option value="元隆" @if (Model.Company == "元隆") { <text> selected</text>}>元隆</option>
+                        <option value="裕新" @if (Model.Company == "裕新") { <text> selected</text>}>裕新</option>
+                        <option value="裕唐" @if (Model.Company == "裕唐") { <text> selected</text>}>裕唐</option>
+                        <option value="匯聯" @if (Model.Company == "匯聯") { <text> selected</text>}>匯聯</option>
+                        <option value="裕民" @if (Model.Company == "裕民") { <text> selected</text>}>裕民</option>
+                        <option value="國通" @if (Model.Company == "國通") { <text> selected</text>}>國通</option>
+                        <option value="裕昌" @if (Model.Company == "裕昌") { <text> selected</text>}>裕昌</option>
+                        <option value="連誠" @if (Model.Company == "連誠") { <text> selected</text>}>連誠</option>
+                        <option value="元智" @if (Model.Company == "元智") { <text> selected</text>}>元智</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">部門<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Department" id="Department">
+                        @foreach (var item in (List<string>)TempData["businessOffice"])
+                        {
+                            <option value="@item" @if (Model.Department == item) { <text> selected</text>}>@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            @*<div class="form-group has-feedback" style="padding-bottom:30px">
+                    <label for="inputEmail3" class="col-sm-2 control-label">手機<span style="color:#a94442;font-size: 18px;">*</span></label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", placeholder = "手機" })
+                    </div>
+                </div>*@
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", @readonly = "true" })
+                </div>
+                @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">密碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "輸入密碼" })
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">確認密碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "確認密碼" })
+                </div>
+            </div>
+
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">品牌<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+
+                    <select name="brand">
+                        <option value="NA">==請選擇品牌==</option>
+                        <option value="NISSAN" @if (Model.brand == "NISSAN") { <text> selected</text>}>NISSAN</option>
+                        <option value="INFINITI" @if (Model.brand == "INFINITI") { <text> selected</text>}>INFINITI</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">角色<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="Role">
+                        @foreach (var item in Model.Roles)
+                        {
+                            if (item.seq.ToString() == Model.Role)
+                            {
+                                <option value="@item.seq" selected>@item.RoleName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.seq">@item.RoleName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group has-feedback" style="padding-bottom:30px">
+                <label for="inputEmail3" class="col-sm-2 control-label">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                <div class="col-sm-10">
+                    <select name="status">
+                        <option value="False">==請選擇狀態==</option>
+                        <option value="True" @if (Model.status) { <text> selected</text>}>啟用</option>
+                        <option value="False" @if (!Model.status) { <text> selected</text>}>停用</option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-xs-4">
+                    @if (TempData["UpdateRight"].ToString() == "True")
+                    {
+                        <button type="submit" class="btn btn-primary btn-flat">修改</button>
+                    }
+                    @if (TempData["DeleteRight"].ToString() == "True" && Model.roleName.Trim() != "ISC最高權限管理人員")
+                    {
+                        <a class="btn btn-danger @Model.roleName.Trim()" href="@Url.Action("Delete", "Account", new { email = Model.Email, name = Model.NameIdentifier })" onclick="return confirm('是否確定刪除')">刪除</a>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+@section Scripts {
+
+    <script>
+    
+    $(".sidebar-menu > li").each(function () {
+        var navItem = $(this);
+        if (navItem.find("a").find("span").text() == "後台帳號管理") {
+            navItem.addClass('active');
+        }
+    });
+
+    function GetBusinessOffice() {
+        var dealerName = $('#Company').find(":selected").val();
+        console.log(dealerName);
+        if (dealerName == "裕隆日產汽車") {
+            $('#Department').empty();
+            $('#Department').append("<option value='無'>無</option>")
+            $('#Department').append("<option value='MSD'>MSD</option>")
+            $('#Department').append("<option value='IBD'>IBD</option>")
+            $('#Department').append("<option value='DTO'>DTO</option>")
+            $('#Department').append("<option value='ISC'>ISC</option>")
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetBusinessOffice", "Dealer")',
+                data: { dealerName: dealerName, type: "old" },
+                success: function (data) {
+                    var list = data.list;
+                    console.log(data);
+                    $('#Department').empty();
+                    $('#Department').append("<option value='無'>無</option>")
+                    $.each(list, function (index, item) {
+                        $('#Department').append("<option value='" + item + "'>" + item + "</option>")
+                    });
+                }
+            })
+        }
+    }
+    </script>
+}

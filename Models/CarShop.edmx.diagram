@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1e0cc1f2b5f04e47be17f190888824ca" Name="Diagram1" ZoomLevel="90">
+        <EntityTypeShape EntityType="CarShopModel.AspNetRoles" Width="2" PointX="0.5" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.AspNetUsers" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.Banner" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.Members" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.Roles" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarShopModel.UserRoles" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="CarShopModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="CarShopModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector ManuallyRouted="false" Association="CarShopModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="CarShopModel.PasswordHistory" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="CarShopModel.Menus" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CarShopModel.MyFavourites" Width="1.5" PointX="10.375" PointY="7.5" />
+        <EntityTypeShape EntityType="CarShopModel.RoleMenus" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CarShopModel.Shops" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="CarShopModel.Subscriptions" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="CarShopModel.News" Width="1.5" PointX="10.375" PointY="10.75" />
+        <EntityTypeShape EntityType="CarShopModel.VisitOrders" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="CarShopModel.Profiles" Width="1.5" PointX="12.375" PointY="3.75" />
+        <EntityTypeShape EntityType="CarShopModel.Dealers" Width="1.5" PointX="12.375" PointY="7.75" />
+        <EntityTypeShape EntityType="CarShopModel.DealerPersons" Width="1.5" PointX="12.375" PointY="12.75" />
+        <EntityTypeShape EntityType="CarShopModel.OTPs" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CarShopModel.Log" Width="1.5" PointX="5.375" PointY="13.75" />
+        <EntityTypeShape EntityType="CarShopModel.Sells" Width="1.5" PointX="7.375" PointY="13.75" />
+        <EntityTypeShape EntityType="CarShopModel.Banners" Width="1.5" PointX="14.5" PointY="3.625" />
+        <EntityTypeShape EntityType="CarShopModel.NoticeRecords" Width="1.5" PointX="8.375" PointY="7.5" />
+        <EntityTypeShape EntityType="CarShopModel.Prepaid" Width="1.5" PointX="14.375" PointY="10.75" />
+        <EntityTypeShape EntityType="CarShopModel.SellsHistory" Width="1.5" PointX="9.375" PointY="15.75" />
+        <EntityTypeShape EntityType="CarShopModel.BuyHistory" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CarShopModel.CarCompareHistory" Width="1.5" PointX="16.375" PointY="4.75" />
+        <EntityTypeShape EntityType="CarShopModel.ResetPwLinks" Width="1.5" PointX="16.375" PointY="7.75" />
+        <EntityTypeShape EntityType="CarShopModel.Code" Width="1.5" PointX="16.375" PointY="10.75" />
+        <AssociationConnector Association="CarShopModel.AspNetUserRoles1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

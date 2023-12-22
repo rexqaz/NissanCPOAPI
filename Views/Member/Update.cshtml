@@ -1,0 +1,557 @@
+﻿@model WebApplication.Models.MemberUpdateViewModel
+@{
+    ViewBag.Title = "編輯會員";
+    ViewBag.icon = "fa fa-user";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Forms/Advanced/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/timepicker/css")
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+
+<style>
+    /*#example1 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+
+    #example2 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+
+    #example3 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }*/
+</style>
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OKUpdate")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>修改成功!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="">
+    <div class="">
+        @using (Html.BeginForm("UpdateInProgress", "Member", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="">
+                <input type="hidden" name="seq" value="@Model.member.seq" />
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input class="form-control" readonly value="@Model.member.name" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">稱謂<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input class="form-control" readonly value="@Model.member.title" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">帳號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input class="form-control" readonly value="@Model.member.mobile" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">會員級別<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input class="form-control" readonly value="一般會員" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">密碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        @if (Model.updatePermission)
+                        {
+                            <input type="text" class="form-control" value="@Model.member.password" name="password" />
+                        }
+                        else
+                        {
+                            <label style="padding-left: 50px">@Model.member.password</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">身分證</label>
+                        <input class="form-control" readonly value="@Model.member.id" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">手機<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        @if (Model.updatePermission)
+                        {
+                            <input type="text" class="form-control" value="@Model.member.mobile" name="mobile" />
+                        }
+                        else
+                        {
+                            <label style="padding-left: 50px">@Model.member.mobile</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">出生年月日<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input class="form-control" readonly value="@Model.member.birthday" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        @if (Model.updatePermission)
+                        {
+                            <input type="text" class="form-control" value="@Model.member.email" name="email" />
+                        }
+                        else
+                        {
+                            <label style="padding-left: 50px">@Model.member.email</label>
+                        }
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">居住地址</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <select class="form-control pull-right" name="liveArea" disabled>
+                                    <option value=""></option>
+                                    <option value="台北市" @if (Model.member.area == "台北市") { <text> selected</text>}>台北市</option>
+                                    <option value="新北市" @if (Model.member.area == "新北市") { <text> selected</text>}>新北市</option>
+                                    <option value="基隆市" @if (Model.member.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                                    <option value="桃園市" @if (Model.member.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                                    <option value="新竹市" @if (Model.member.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                                    <option value="新竹縣" @if (Model.member.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                                    <option value="苗栗縣" @if (Model.member.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                                    <option value="台中市" @if (Model.member.area == "台中市") { <text> selected</text>}>台中市</option>
+                                    <option value="彰化縣" @if (Model.member.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                                    <option value="南投縣" @if (Model.member.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                                    <option value="嘉義市" @if (Model.member.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                                    <option value="台南市" @if (Model.member.area == "台南市") { <text> selected</text>}>台南市</option>
+                                    <option value="高雄市" @if (Model.member.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                                    <option value="屏東縣" @if (Model.member.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                                    <option value="台東縣" @if (Model.member.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                                    <option value="花蓮縣" @if (Model.member.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                                    <option value="宜蘭縣" @if (Model.member.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-9">
+                                <input name="address" class="form-control" value="@Model.member.address" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @*<div class="row">
+                <div class="col-xs-12" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-2 control-label">居住地址</label>
+                        <div class="col-sm-2" style="margin-left:-110px">
+                            <select class="form-control pull-right" name="liveArea" disabled>
+                                <option value=""></option>
+                                <option value="台北市" @if (Model.member.area == "台北市") { <text> selected</text>}>台北市</option>
+                                <option value="新北市" @if (Model.member.area == "新北市") { <text> selected</text>}>新北市</option>
+                                <option value="基隆市" @if (Model.member.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                                <option value="桃園市" @if (Model.member.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                                <option value="新竹市" @if (Model.member.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                                <option value="新竹縣" @if (Model.member.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                                <option value="苗栗縣" @if (Model.member.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                                <option value="台中市" @if (Model.member.area == "台中市") { <text> selected</text>}>台中市</option>
+                                <option value="彰化縣" @if (Model.member.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                                <option value="南投縣" @if (Model.member.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                                <option value="嘉義市" @if (Model.member.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                                <option value="台南市" @if (Model.member.area == "台南市") { <text> selected</text>}>台南市</option>
+                                <option value="高雄市" @if (Model.member.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                                <option value="屏東縣" @if (Model.member.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                                <option value="台東縣" @if (Model.member.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                                <option value="花蓮縣" @if (Model.member.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                                <option value="宜蘭縣" @if (Model.member.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-8" style="">
+                            <input name="address" class="form-control" value="@Model.member.address" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">興趣車款</label>
+                        <input class="form-control" readonly value="@Model.member.interestedCar" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select name="status" class="form-control">
+                            <option value="True" @if (Model.member.status == true) { <text> selected</text>}>啟用</option>
+                            <option value="False" @if (Model.member.status == false) { <text> selected</text>}>停用</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-4 col-xs-offset-6" style="text-align:right">
+                @*@if (TempData["DeleteRight"].ToString() == "True")
+                {
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Member", new { mobile = Model.member.mobile})" onclick="return confirm('是否確定刪除')">刪除</a>
+                }*@
+                @if (TempData["UpdateRight"].ToString() == "True")
+                {
+                <button type="submit" class="btn btn-primary" onclick="return confirm('是否確認修改此筆資料?');">修改</button>
+                }
+            </div>
+
+            <div class="box-body">
+                <table id="behavior" class="table table-bordered table-striped" style="margin-bottom:50px">
+                    <thead>
+                        <tr>
+                            <th colspan="2">行為紀錄</th>
+                        </tr>
+                        <tr>
+                            <th>日期</th>
+                            <th>行為</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                @*<table id="notice" class="table table-bordered table-striped" style="margin-bottom:50px">
+                    <thead>
+                        <tr>
+                            <th colspan="5">關注車輛</th>
+                        </tr>
+                        <tr>
+                            <th>日期</th>
+                            <th>售價</th>
+                            <th>車型</th>
+                            <th>年份</th>
+                            <th>中古車營業據點</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <table id="subscribe" class="table table-bordered table-striped" style="margin-bottom:50px">
+                    <thead>
+                        <tr>
+                            <th colspan="10">條件訂閱</th>
+                        </tr>
+                        <tr>
+                            <th>日期</th>
+                            <th>售價</th>
+                            <th>里程數</th>
+                            <th>年份</th>
+                            <th>驅動方式</th>
+                            <th>車種</th>
+                            <th>車型</th>
+                            <th>顏色</th>
+                            <th>車輛所在地</th>
+                            <th>中古車營業據點</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <table id="prepaid" class="table table-bordered table-striped" style="margin-bottom:50px">
+                    <thead>
+                        <tr>
+                            <th colspan="6">預付保留</th>
+                        </tr>
+                        <tr>
+                            <th>日期</th>
+                            <th>訂單編號</th>
+                            <th>預付金額</th>
+                            <th>售價</th>
+                            <th>年份</th>
+                            <th>中古車營業據點</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>*@
+            </div>
+
+        }
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+    @Scripts.Render("~/AdminLTE/plugins/input-mask/js")
+    @Scripts.Render("~/AdminLTE/plugins/momentjs/js")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/colorpicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/timepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/icheck/js")
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+
+<script>
+    $(document).ready(function () {
+        $('#behavior')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetBehaviorData", "Member")",
+                "type": "POST",
+                "data": { "seq": '@Model.member.seq'}
+            },
+            "columns": [
+                {
+                    "data": "date", "name": "日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "behavior", "name": "行為", "autoWidth": true }
+            ]
+            });
+            @*$('#notice')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetNoticeData", "Member")",
+                "type": "POST",
+                "data": { "seq": '@Model.member.seq'}
+            },
+            "columns": [
+                {
+                    "data": "visitTime", "name": "時間", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "price", "name": "售價", "autoWidth": true },
+                { "data": "carModal", "name": "車型", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "年分", "autoWidth": true },
+                { "data": "dealer", "name": "中古車營業據點", "autoWidth": true },
+            ]
+            });
+
+            $('#subscribe')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetSubscribeData", "Member")",
+                "type": "POST",
+                "data": { "seq": '@Model.member.seq'}
+            },
+            "columns": [
+                {
+                    "data": "createTime", "name": "日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "price", "name": "售價", "autoWidth": true },
+                { "data": "milage", "name": "里程數", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "年分", "autoWidth": true },
+                { "data": "driveMode", "name": "驅動模式", "autoWidth": true },
+                { "data": "carType", "name": "車種", "autoWidth": true },
+                { "data": "carModel", "name": "車型", "autoWidth": true },
+                { "data": "outerColor", "name": "顏色", "autoWidth": true },
+                { "data": "area", "name": "車輛所在地", "autoWidth": true },
+                { "data": "dealer", "name": "中古車營業據點", "autoWidth": true },
+            ]
+            });
+
+            $('#prepaid')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetPrepaidData", "Member")",
+                "type": "POST",
+                "data": { "seq": '@Model.member.seq'}
+            },
+            "columns": [
+                {
+                    "data": "createTime", "name": "日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "prepaidNo", "name": "訂單編號", "autoWidth": true },
+                { "data": "prepaidMoney", "name": "預付金額", "autoWidth": true },
+                { "data": "price", "name": "售價", "autoWidth": true },
+                { "data": "yearOfManufacture", "name": "年分", "autoWidth": true },
+                { "data": "dealer", "name": "中古車營業據點", "autoWidth": true },
+            ]
+            });*@
+        });
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "會員管理") {
+                navItem.addClass('active');
+            }
+        });
+
+
+</script>
+}
+
+

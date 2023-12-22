@@ -1,0 +1,970 @@
+﻿@model WebApplication.Models.CarShopViewModel
+@{
+    ViewBag.Title = "檢視車輛";
+    ViewBag.icon = "fa fa-car";
+}
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+@Styles.Render("~/AdminLTE/plugins/select2/css")
+<style>
+    img {
+        width: 400px;
+        height: auto;
+    }
+</style>
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+
+<div>
+    <form method="post" action="@Url.Action("UpdateInProgress", "CarMgt")" enctype="multipart/form-data" onsubmit="return confirm('是否確定修改?');">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <input name="seq" type="hidden" value="@Model.seq" />
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車輛編號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9" style="padding-right:30px">
+                            <input name="shopNo" readonly class="form-control" value="@Model.ShopNo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">建立時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="createTime" readonly class="form-control" value="@Model.createTime" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">最後更新時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="updateTime" readonly class="form-control" value="@Model.updateTime" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">地區<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="area" disabled>
+                                <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                                <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                                <option value="基隆市" @if (Model.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                                <option value="桃園市" @if (Model.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                                <option value="新竹市" @if (Model.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                                <option value="新竹縣" @if (Model.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                                <option value="苗栗縣" @if (Model.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                                <option value="台中市" @if (Model.area == "台中市") { <text> selected</text>}>台中市</option>
+                                <option value="彰化縣" @if (Model.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                                <option value="南投縣" @if (Model.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                                <option value="雲林縣" @if (Model.area == "雲林縣") { <text> selected</text>}>雲林縣</option>
+                                <option value="嘉義市" @if (Model.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                                <option value="嘉義縣" @if (Model.area == "嘉義縣") { <text> selected</text>}>嘉義縣</option>
+                                <option value="台南市" @if (Model.area == "台南市") { <text> selected</text>}>台南市</option>
+                                <option value="高雄市" @if (Model.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                                <option value="屏東縣" @if (Model.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                                <option value="台東縣" @if (Model.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                                <option value="花蓮縣" @if (Model.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                                <option value="宜蘭縣" @if (Model.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="dealer" id="dealer" disabled>
+                                <option value="">==請選擇==</option>
+                                @foreach (var item in (List<string>)TempData["dealerOptions"])
+                                {
+                                    <option value="@item" @if (Model.dealer == item) { <text> selected</text>}>@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">中古車營業據點<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="stronghold" id="stronghold" disabled>
+                                @foreach (var item in (List<string>)TempData["strongholdOptions"])
+                                {
+                                    <option value="@item" @if (Model.stronghold == item) { <text> selected</text>}>@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車系<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="carType" disabled>
+                                <option value="轎車" @if (Model.carType == "轎車") { <text> selected</text>}>轎車</option>
+                                <option value="休旅車" @if (Model.carType == "休旅車") { <text> selected</text>}>休旅車</option>
+                                <option value="電動車" @if (Model.carType == "電動車") { <text> selected</text>}>電動車</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車款<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="carModel" disabled>
+                                @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                                {
+                                    <option value="ALTIMA" @if (Model.carModel == "ALTIMA") { <text> selected</text>}>ALTIMA</option>
+                                    <option value="BLUEBIRD SYLPHY" @if (Model.carModel == "BLUEBIRD SYLPHY") { <text> selected</text>}>BLUEBIRD SYLPHY</option>
+                                    <option value="GTR" @if (Model.carModel == "GTR") { <text> selected</text>}>GTR</option>
+                                    <option value="JUKE" @if (Model.carModel == "JUKE") { <text> selected</text>}>JUKE</option>
+                                    <option value="KICKS" @if (Model.carModel == "KICKS") { <text> selected</text>}>KICKS</option>
+                                    <option value="LEAF" @if (Model.carModel == "LEAF") { <text> selected</text>}>LEAF</option>
+                                    <option value="LIVINA" @if (Model.carModel == "LIVINA") { <text> selected</text>}>LIVINA</option>
+                                    <option value="MARCH" @if (Model.carModel == "MARCH") { <text> selected</text>}>MARCH</option>
+                                    <option value="QUEST" @if (Model.carModel == "QUEST") { <text> selected</text>}>QUEST</option>
+                                    <option value="ROGUE" @if (Model.carModel == "ROGUE") { <text> selected</text>}>ROGUE</option>
+                                    <option value="SENTRA" @if (Model.carModel == "SENTRA") { <text> selected</text>}>SENTRA</option>
+                                    <option value="TEANA" @if (Model.carModel == "TEANA") { <text> selected</text>}>TEANA</option>
+                                    <option value="TIIDA" @if (Model.carModel == "TIIDA") { <text> selected</text>}>TIIDA</option>
+                                    <option value="X-TRAIL" @if (Model.carModel == "X-TRAIL") { <text> selected</text>}>X-TRAIL</option>
+                                    <option value="350Z" @if (Model.carModel == "350Z") { <text> selected</text>}>350Z</option>
+                                    <option value="370Z" @if (Model.carModel == "370Z") { <text> selected</text>}>370Z</option>
+                                }
+                                else
+                                {
+                                    <option value="Q50" @if (Model.carModel == "Q50") { <text> selected</text>}>Q50</option>
+                                    <option value="Q60" @if (Model.carModel == "Q60") { <text> selected</text>}>Q60</option>
+                                    <option value="QX30" @if (Model.carModel == "QX30") { <text> selected</text>}>QX30</option>
+                                    <option value="QX50" @if (Model.carModel == "QX50") { <text> selected</text>}>QX50</option>
+                                    <option value="QX55" @if (Model.carModel == "QX55") { <text> selected</text>}>QX55</option>
+                                    <option value="QX60" @if (Model.carModel == "QX60") { <text> selected</text>}>QX60</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">出廠年月<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <div class="col-sm-6" style="margin-left:0px;padding-left:0px">
+
+                                <select class="form-control" name="yearOfManufacture" id="yearOfManufacture" disabled>
+                                    <option value="0">西元年</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="monthOfManufacture" style="width:188px" disabled>
+                                    <option>月份</option>
+                                    <option value="1" @if (Model.monthOfManufacture == 1) { <text> selected</text>}>01</option>
+                                    <option value="2" @if (Model.monthOfManufacture == 2) { <text> selected</text>}>02</option>
+                                    <option value="3" @if (Model.monthOfManufacture == 3) { <text> selected</text>}>03</option>
+                                    <option value="4" @if (Model.monthOfManufacture == 4) { <text> selected</text>}>04</option>
+                                    <option value="5" @if (Model.monthOfManufacture == 5) { <text> selected</text>}>05</option>
+                                    <option value="6" @if (Model.monthOfManufacture == 6) { <text> selected</text>}>06</option>
+                                    <option value="7" @if (Model.monthOfManufacture == 7) { <text> selected</text>}>07</option>
+                                    <option value="8" @if (Model.monthOfManufacture == 8) { <text> selected</text>}>08</option>
+                                    <option value="9" @if (Model.monthOfManufacture == 9) { <text> selected</text>}>09</option>
+                                    <option value="10" @if (Model.monthOfManufacture == 10) { <text> selected</text>}>10</option>
+                                    <option value="11" @if (Model.monthOfManufacture == 11) { <text> selected</text>}>11</option>
+                                    <option value="12" @if (Model.monthOfManufacture == 12) { <text> selected</text>}>12</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">里程數<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="milage" class="form-control" value="@Model.milage" readonly />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">顏色<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="outerColor" disabled>
+                                <option value="黑色" @if (Model.outerColor == "黑色") { <text> selected</text>}>黑色</option>
+                                <option value="灰色" @if (Model.outerColor == "灰色") { <text> selected</text>}>灰色</option>
+                                <option value="銀色" @if (Model.outerColor == "銀色") { <text> selected</text>}>銀色</option>
+                                <option value="白色" @if (Model.outerColor == "白色") { <text> selected</text>}>白色</option>
+                                <option value="紅色" @if (Model.outerColor == "紅色") { <text> selected</text>}>紅色</option>
+                                <option value="藍色" @if (Model.outerColor == "藍色") { <text> selected</text>}>藍色</option>
+                                <option value="橘色" @if (Model.outerColor == "橘色") { <text> selected</text>}>橘色</option>
+                                <option value="其他" @if (Model.outerColor == "其他") { <text> selected</text>}>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">燃料<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="fuelType" disabled>
+                                <option value="汽油" @if (Model.fuelType == "汽油") { <text> selected</text>}>汽油</option>
+                                <option value="柴油" @if (Model.fuelType == "柴油") { <text> selected</text>}>柴油</option>
+                                <option value="電動" @if (Model.fuelType == "電動") { <text> selected</text>}>電動</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">驅動方式<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="driveMode" disabled>
+                                <option value="2WD" @if (Model.driveMode == "2WD") { <text> selected</text>}>2WD</option>
+                                <option value="4WD" @if (Model.driveMode == "4WD") { <text> selected</text>}>4WD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">排氣量<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="displacement" class="form-control" value="@Model.displacement" readonly />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">內外裝配備<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right select2" name="outEquip" disabled multiple="multiple">
+                                @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                                {
+                                    <option value="LED頭燈" @if (Model.outEquip.Contains("LED頭燈")) { <text> selected</text>}>LED頭燈</option>
+                                    <option value="感應電動尾門" @if (Model.outEquip.Contains("感應電動尾門")) { <text> selected</text>}>感應電動尾門</option>
+                                    <option value="全景式電動天窗" @if (Model.outEquip.Contains("全景式電動天窗")) { <text> selected</text>}>全景式電動天窗</option>
+                                    <option value="真皮座椅" @if (Model.outEquip.Contains("真皮座椅")) { <text> selected</text>}>真皮座椅</option>
+                                    <option value="電動座椅" @if (Model.outEquip.Contains("電動座椅")) { <text> selected</text>}>電動座椅</option>
+                                    <option value="藍芽連線" @if (Model.outEquip.Contains("藍芽連線")) { <text> selected</text>}>藍芽連線</option>
+                                    <option value="倒車影像顯示" @if (Model.outEquip.Contains("倒車影像顯示")) { <text> selected</text>}>倒車影像顯示</option>
+                                }
+                                else
+                                {
+                                    <option value="LED主動轉向頭燈" @if (Model.outEquip.Contains("LED主動轉向頭燈")) { <text> selected</text>}>LED主動轉向頭燈</option>
+                                    <option value="電動全景天窗" @if (Model.outEquip.Contains("電動全景天窗")) { <text> selected</text>}>電動全景天窗</option>
+                                    <option value="腳踢感應電動尾門" @if (Model.outEquip.Contains("腳踢感應電動尾門")) { <text> selected</text>}>腳踢感應電動尾門</option>
+                                    <option value="智慧鑰匙遙控引擎啟閉" @if (Model.outEquip.Contains("智慧鑰匙遙控引擎啟閉")) { <text> selected</text>}>智慧鑰匙遙控引擎啟閉</option>
+                                    <option value="座椅記憶功能" @if (Model.outEquip.Contains("座椅記憶功能")) { <text> selected</text>}>座椅記憶功能</option>
+                                    <option value="Apple Carplay/Android Auto整合系統" @if (Model.outEquip.Contains("Apple Carplay/Android Auto整合系統")) { <text> selected</text>}>Apple Carplay/Android Auto整合系統</option>
+                                    <option value="BOSE頂級音響系統" @if (Model.outEquip.Contains("BOSE頂級音響系統")) { <text> selected</text>}>BOSE頂級音響系統</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">安全重點功能<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right select2" name="feature" disabled multiple="multiple">
+                                @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                                {
+                                    <option value="安全氣囊" @if (Model.feature.Contains("安全氣囊")) { <text> selected</text>}>安全氣囊</option>
+                                    <option value="ICC智慧型全速域定速控制系統" @if (Model.feature.Contains("ICC智慧型全速域定速控制系統")) { <text> selected</text>}>ICC智慧型全速域定速控制系統</option>
+                                    <option value="LDW車道偏離警示系統" @if (Model.feature.Contains("LDW車道偏離警示系統")) { <text> selected</text>}>LDW車道偏離警示系統</option>
+                                    <option value="AVM 360°環景影像監控系統" @if (Model.feature.Contains("AVM 360°環景影像監控系統")) { <text> selected</text>}>AVM 360°環景影像監控系統</option>
+                                    <option value="IEB防追撞緊急煞車系統" @if (Model.feature.Contains("IEB防追撞緊急煞車系統")) { <text> selected</text>}>IEB防追撞緊急煞車系統</option>
+                                }
+                                else
+                                {
+                                    <option value="AVM環景顯示附MOD物體偵測" @if (Model.feature.Contains("AVM環景顯示附MOD物體偵測")) { <text> selected</text>}>AVM環景顯示附MOD物體偵測</option>
+                                    <option value="HUD全彩資訊投影顯示" @if (Model.feature.Contains("HUD全彩資訊投影顯示")) { <text> selected</text>}>HUD全彩資訊投影顯示</option>
+                                    <option value="ICC全速域智慧定速系統" @if (Model.feature.Contains("ICC全速域智慧定速系統")) { <text> selected</text>}>ICC全速域智慧定速系統</option>
+                                    <option value="LKA車道維持輔助系統" @if (Model.feature.Contains("LKA車道維持輔助系統")) { <text> selected</text>}>LKA車道維持輔助系統</option>
+                                    <option value="BSW盲點側撞警示系統" @if (Model.feature.Contains("BSW盲點側撞警示系統")) { <text> selected</text>}>BSW盲點側撞警示系統</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">馬力<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="horsepower" class="form-control" value="@Model.horsepower" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">售價<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="price" class="form-control" value="@Model.price" readonly />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-2 control-label">推薦理由<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-10" style="margin-left:-60px">
+                            <input name="description" class="form-control" value="@Model.description" readonly />
+                            @*<textarea name="description" style="width: 640px; height: 200px;"></textarea>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">1.代表圖及縮圖<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="carCondition1" name="carCondition1" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            @*<a href="#carCondition1Pic" data-toggle="modal" data-target="#carCondition1Pic">@Model.carCondition1</a>*@
+                            <a href="#carCondition1Pic" data-toggle="modal" data-target="#carCondition1Pic"><img id="blah1" src="@Model.carCondition1" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">2.左前<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="carCondition2" name="carCondition2" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition2Pic" data-toggle="modal" data-target="#carCondition2Pic"><img id="blah2" src="@Model.carCondition2" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">3.右前<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="carCondition3" name="carCondition3" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition3Pic" data-toggle="modal" data-target="#carCondition3Pic"><img id="blah3" src="@Model.carCondition3" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">4.左後<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="carCondition4" name="carCondition4" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition4Pic" data-toggle="modal" data-target="#carCondition4Pic"><img id="blah4" src="@Model.carCondition4" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">5.右後<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="carCondition5" name="carCondition5" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition5Pic" data-toggle="modal" data-target="#carCondition5Pic"><img id="blah5" src="@Model.carCondition5" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px @if(string.IsNullOrEmpty(Model.carCondition6)){<text>;display:none</text>}" id="pic6Area">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">6.</label>
+                        <div class="col-sm-9">
+                            <input id="carCondition6" name="carCondition6" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition6Pic" data-toggle="modal" data-target="#carCondition6Pic"><img id="blah6" src="@Model.carCondition6" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 30px @if(string.IsNullOrEmpty(Model.carCondition7)){<text>;display:none</text>}" id="area78">
+                <div class="col-xs-6" style="padding-bottom:30px" id="pic7Area">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">7.</label>
+                        <div class="col-sm-9">
+                            <input id="carCondition7" name="carCondition7" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition7Pic" data-toggle="modal" data-target="#carCondition7Pic"><img id="blah7" src="@Model.carCondition7" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px @if(string.IsNullOrEmpty(Model.carCondition8)){<text>;display:none</text>}" id="pic8Area">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">8.</label>
+                        <div class="col-sm-9">
+                            <input id="carCondition8" name="carCondition8" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition8Pic" data-toggle="modal" data-target="#carCondition8Pic"><img id="blah6" src="@Model.carCondition8" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="@if(string.IsNullOrEmpty(Model.carCondition9)){<text>;display:none</text>}" id="area910">
+                <div class="col-xs-6" style="padding-bottom:30px" id="pic9Area">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">9.</label>
+                        <div class="col-sm-9">
+                            <input id="carCondition9" name="carCondition9" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition9Pic" data-toggle="modal" data-target="#carCondition9Pic"><img id="blah9" src="@Model.carCondition9" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px @if(string.IsNullOrEmpty(Model.carCondition10)){<text>;display:none</text>}" id="pic10Area">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">10.</label>
+                        <div class="col-sm-9">
+                            <input id="carCondition10" name="carCondition10" class="form-control" type="file" accept="image/*" style="margin-bottom:5px;" disabled />
+                            <a href="#carCondition10Pic" data-toggle="modal" data-target="#carCondition10Pic"><img id="blah10" src="@Model.carCondition10" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <input type="button" onclick="addPic()" style="background-color:black;color:white" value="+新增照片張數" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        @if (Html.getBrand(User.Identity.Name) == "NISSAN")
+                        {
+                            <label for="inputEmail3" class="col-sm-3 control-label">上傳查定表<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="inspectionTable" name="inspectionTable" class="form-control" type="file" accept=".pdf" style="margin-bottom:5px;" disabled />
+                                <a href="@Model.inspectionTable" target="_blank">預覽查定表</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <label for="inputEmail3" class="col-sm-3 control-label">上傳保證書<span style="color:#a94442;font-size: 18px;">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="inspectionTable" name="inspectionTable" class="form-control" type="file" accept=".pdf" style="margin-bottom:5px;" disabled />
+                                <a href="@Model.inspectionTable" target="_blank">預覽保證書</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label" style="font-size:large">成交回報</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">會員姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="member" class="form-control" value="@Model.member" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">負責中古車銷售顧問<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="consultant" disabled>
+                                @foreach (var item in (List<string>)TempData["dealerPersons"])
+                                {
+                                    <option value="@item" @if (Model.consultant == item) { <text> selected</text>}>@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">出售價<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="sellPrice" class="form-control" value="@Model.price" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">成交價<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="finalPrice" class="form-control" value="@Model.finalPrice" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">正式訂單編號</label>
+                        <div class="col-sm-9">
+                            <input name="formalShopNo" class="form-control" value="@Model.formalShopNo" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">合約書<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="contract" name="contract" class="form-control" type="file" accept="application/pdf" style="margin-bottom:5px;" disabled />
+                            <a href="@Model.inspectionTable" target="_blank">預覽合約書</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <hr style="border-top:1px solid black" />
+
+    <div class="box-body">
+        <table id="notice" class="table table-bordered table-striped" style="margin-bottom:50px">
+            <thead>
+                <tr>
+                    <th colspan="3">關注車輛紀錄</th>
+                </tr>
+                <tr>
+                    <th>時間</th>
+                    <th>關注次數</th>
+                    <th>累積關注次數</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        @*<hr style="border-top:1px solid black" />
+            <table id="orderVisit" class="table table-bordered table-striped" style="margin-bottom:50px">
+                <thead>
+                    <tr>
+                        <th colspan="7">預約賞車紀錄</th>
+                    </tr>
+                    <tr>
+                        <th>時間</th>
+                        <th>會員姓名</th>
+                        <th>稱謂</th>
+                        <th>手機</th>
+                        <th>指定銷售顧問</th>
+                        <th>服務銷售顧問</th>
+                        <th>服務狀態</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>*@
+    </div>
+</div>
+<div class="modal fade" id="carCondition1Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片1</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition1">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition2Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片2</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition2">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition3Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片3</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition3">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition4Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片4</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition4">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition5Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片5</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition5">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition6Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片6</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition6">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition7Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片7</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition7">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition8Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片8</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition8">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition9Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片9</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition9">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="carCondition10Pic">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">照片10</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="picPreview">
+                <img src="@Model.carCondition10">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+
+<script>
+        $(document).ready(function () {
+            let yearStart = 2011;
+            let currentYear = new Date().getFullYear();
+            for (let i = yearStart; i <= currentYear; i++) {
+                $('#yearOfManufacture').append("<option value='" + i + "'>" + i + "</option>")
+            }
+
+            $("#yearOfManufacture").val("@Model.yearOfManufacture").change();
+            $('.select2').select2();
+            $('#orderVisit')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetVisitOrder", "CarMgt")",
+                "type": "POST",
+                "data": { "shopNo": '@Model.ShopNo'}
+            },
+            "columns": [
+                {
+                    "data": "visitTime", "name": "時間", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "name", "name": "會員姓名", "autoWidth": true },
+                { "data": "title", "name": "稱謂", "autoWidth": true },
+                { "data": "mobile", "name": "手機", "autoWidth": true },
+                { "data": "salesRep", "name": "指定銷售顧問", "autoWidth": true },
+                { "data": "consultantName", "name": "服務銷售顧問", "autoWidth": true },
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                {
+                    "data": "seq",
+                    "render": function (data, row) { return '<input type="button" value="儲存" class="btn btn-success" onclick="SaveVisitOrder(' + data + ')" /> ' }
+                },
+            ]
+            });
+
+            $('#notice')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetNoticeData", "CarMgt")",
+                "type": "POST",
+                "data": { "shopNo": '@Model.seq'}
+            },
+            "columns": [
+                { "data": "period", "name": "時間", "autoWidth": true },
+                { "data": "noticeTimes", "name": "關注次數", "autoWidth": true },
+                { "data": "accumulativeNoticeTimes", "name": "累積關注次數", "autoWidth": true },
+            ]
+            });
+        })
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "車輛管理") {
+                navItem.addClass('active');
+            }
+        });
+
+        function SaveVisitOrder(seq) {
+            var status = $('#status' + seq + " option:selected").text();
+            var consultant = $('#consultant' + seq + " option:selected").text();
+            var data = new FormData();
+            data.append("seq", seq);
+            data.append("status", status);
+            data.append("consultant", consultant);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateVisitOrder", "CarMgt")",
+                data: data,
+                async: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log("b: " + data);
+                    if (data != "OK") {
+                        alert(data);
+                    }
+                    else {
+                        alert("儲存成功!!");
+                    }
+                }
+            })
+        }
+</script>
+}

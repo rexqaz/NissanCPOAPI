@@ -1,0 +1,610 @@
+﻿@model WebApplication.Models.CarBuyViewModel
+@{
+    ViewBag.Title = "檢視我要買車";
+    ViewBag.icon = "fa fa-thumbs-up";
+}
+
+@section Menu {
+    @Scripts.Render("~/Scripts/Forms/Advanced/menu")
+}
+
+@Styles.Render("~/AdminLTE/plugins/timepicker/css")
+@Styles.Render("~/AdminLTE/plugins/datatables/css")
+
+<style>
+    /*#example1 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+
+    #example2 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+
+    #example3 thead th, #example1 tbody tr td {
+        padding: 10px 18px;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }*/
+</style>
+
+@if (TempData["MemberResult"] != null)
+{
+    if (TempData["MemberResult"].ToString() == "OK")
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Modify OK!!。</strong>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@TempData["MemberResult"].ToString()</strong>
+        </div>
+    }
+}
+
+<div class="">
+    <div class="">
+        @using (Html.BeginForm("Update1", "CarBuy", new { seq = "預付保留" + @Model.seq }, FormMethod.Post, new { role = "form", onsubmit = "$('#area').removeAttr('disabled');return confirm('是否確定修改?');" }))
+        {
+            @Html.AntiForgeryToken()
+            <input name="seq" type="hidden" value="@Model.seq" />
+            @*<div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">車輛編號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9" style="padding-right:30px">
+                            <input name="sellNo" readonly class="form-control" value="@Model.shopNo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">建立時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="createTime" readonly class="form-control" value="@Model.createTime" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">最後更新時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="updateTime" readonly class="form-control" value="@Model.updateTime" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">分類<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="updateTime" readonly class="form-control" value="@Model.category" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="dealer" class="form-control" value="@Model.dealer" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">中古車營業據點<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="stronghold" class="form-control" value="@Model.stronghold" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">指定中古車<br />銷售顧問<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="salesRep" class="form-control" value="@Model.assignedConsulant" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">負責中古車<br />銷售顧問<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="consultant" name="consultant">
+                                <option value="" @if (string.IsNullOrEmpty(Model.serveConsulant)) { <text> selected</text>}>請指派銷售顧問</option>
+                                @foreach (var item in (List<string>)TempData["dealerPersonOptions"])
+                                {
+                                    <option value="@item" @if (Model.serveConsulant == item) { <text> selected</text>}>@item</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">會員姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="owner" class="form-control" value="@Model.member" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">身分證</label>
+                        <div class="col-sm-9">
+                            <input name="mobile" class="form-control" value="@Model.id" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">手機號碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <input name="mobile" class="form-control" value="@Model.mobile" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input name="mobile" class="form-control" value="@Model.email" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-2 control-label">居住地址</label>
+                        <div class="col-sm-2" style="margin-left:-60px">
+                            <select class="form-control pull-right" name="liveArea">
+                                <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                                <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-8" style="margin-left:60px">
+                            <input name="address" class="form-control" value="@Model.address" style="margin-left:-70px" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-2 control-label">方便連絡時段<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-6" style="margin-left:-60px">
+                            <input name="visitTime" id="visitTime" readonly class="form-control" value="@Model.visitTime" />
+                        </div>
+                        <div class="col-sm-6" style="margin-left:60px">
+                            <input name="period" class="form-control" value="@Model.period" style="margin-left:-70px" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>*@
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">車輛編號<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="shopNo" readonly class="form-control" value="@Model.shopNo" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">建立日期<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="createTime" readonly class="form-control" value="@Model.createTime" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">最後更新時間<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="updateTime" readonly class="form-control" value="@Model.updateTime" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">分類<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="category" readonly class="form-control" value="@Model.category" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">經銷商<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="dealer" readonly class="form-control" value="@Model.dealer" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">中古車營業據點<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="stronghold" readonly class="form-control" value="@Model.stronghold" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">指定中古車銷售顧問<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="assignedConsulant" readonly class="form-control" value="@Model.assignedConsulant" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">負責中古車銷售顧問<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select class="form-control" id="consultant" name="serveConsulant">
+                            <option value="" @if (string.IsNullOrEmpty(Model.serveConsulant)) { <text> selected</text>}>請指派銷售顧問</option>
+                            @foreach (var item in (List<string>)TempData["dealerPersonOptions"])
+                            {
+                                <option value="@item" @if (Model.serveConsulant == item) { <text> selected</text>}>@item</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">會員姓名<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="member" readonly class="form-control" value="@Model.member" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">身分證<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="id" readonly class="form-control" value="@Model.id" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">手機號碼<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="mobile" readonly class="form-control" value="@Model.mobile" />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">Email<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <input name="email" readonly class="form-control" value="@Model.email" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">居住地址</label>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <select class="form-control pull-right" name="area" id="area" disabled>
+                                    <option value="" @if (string.IsNullOrEmpty(Model.area)) { <text> selected</text>}></option>
+                                    <option value="台北市" @if (Model.area == "台北市") { <text> selected</text>}>台北市</option>
+                                    <option value="新北市" @if (Model.area == "新北市") { <text> selected</text>}>新北市</option>
+                                    <option value="基隆市" @if (Model.area == "基隆市") { <text> selected</text>}>基隆市</option>
+                                    <option value="桃園市" @if (Model.area == "桃園市") { <text> selected</text>}>桃園市</option>
+                                    <option value="新竹市" @if (Model.area == "新竹市") { <text> selected</text>}>新竹市</option>
+                                    <option value="新竹縣" @if (Model.area == "新竹縣") { <text> selected</text>}>新竹縣</option>
+                                    <option value="苗栗縣" @if (Model.area == "苗栗縣") { <text> selected</text>}>苗栗縣</option>
+                                    <option value="台中市" @if (Model.area == "台中市") { <text> selected</text>}>台中市</option>
+                                    <option value="彰化縣" @if (Model.area == "彰化縣") { <text> selected</text>}>彰化縣</option>
+                                    <option value="南投縣" @if (Model.area == "南投縣") { <text> selected</text>}>南投縣</option>
+                                    <option value="嘉義市" @if (Model.area == "嘉義市") { <text> selected</text>}>嘉義市</option>
+                                    <option value="台南市" @if (Model.area == "台南市") { <text> selected</text>}>台南市</option>
+                                    <option value="高雄市" @if (Model.area == "高雄市") { <text> selected</text>}>高雄市</option>
+                                    <option value="屏東縣" @if (Model.area == "屏東縣") { <text> selected</text>}>屏東縣</option>
+                                    <option value="台東縣" @if (Model.area == "台東縣") { <text> selected</text>}>台東縣</option>
+                                    <option value="花蓮縣" @if (Model.area == "花蓮縣") { <text> selected</text>}>花蓮縣</option>
+                                    <option value="宜蘭縣" @if (Model.area == "宜蘭縣") { <text> selected</text>}>宜蘭縣</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-9">
+                                <input name="address" class="form-control" value="@Model.address" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">方便連絡時段<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input name="visitTime" id="visitTime" type="date" class="form-control" />
+                            </div>
+                            <div class="col-xs-6">
+                                <select class="form-control pull-right" name="period">
+                                    <option value="09:00 - 12:00" @if (Model.period == "09:00 - 12:00") { <text> selected</text>}>09:00 - 12:00</option>
+                                    <option value="12:00 - 18:00" @if (Model.period == "12:00 - 18:00") { <text> selected</text>}>12:00 - 18:00</option>
+                                    <option value="18:00以後" @if (Model.period == "18:00以後") { <text> selected</text>}>18:00以後</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">金額</label>
+                        <input class="form-control" value="3000" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">預付保留單號</label>
+                        <input name="prepaidNo" class="form-control" value="@Model.prepaidNo" readonly />
+                    </div>
+                </div>
+            </div>
+            @*<div class="row">
+
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">金額</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" value="3000" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">預付保留單號</label>
+                        <div class="col-sm-9">
+                            <input name="prepaidNo" class="form-control" value="@Model.prepaidNo" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="未處理" @if (Model.status == "未處理") { <text> selected</text>}>未處理</option>
+                            <option value="已指派" @if (Model.status == "已指派") { <text> selected</text>}>已指派</option>
+                            <option value="已連繫" @if (Model.status == "已連繫") { <text> selected</text>}>已連繫</option>
+                            <option value="訂單簽約" @if (Model.status == "訂單簽約") { <text> selected</text>}>訂單簽約</option>
+                            <option value="戰敗" @if (Model.status == "戰敗") { <text> selected</text>}>戰敗</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">金流<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select class="form-control" id="cashFlow" name="cashFlow">
+                            <option value="未付款" @if (Model.cashFlow == "未付款") { <text> selected</text>}>未付款</option>
+                            <option value="已付訂金" @if (Model.cashFlow == "已付訂金") { <text> selected</text>}>已付訂金</option>
+                            <option value="申請退訂" @if (Model.cashFlow == "申請退訂") { <text> selected</text>}>申請退訂</option>
+                            <option value="已退款" @if (Model.cashFlow == "已退款") { <text> selected</text>}>已退款</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            @*<div class="row">
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">狀態<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="status" name="status">
+                                <option value="未處理">未處理</option>
+                                <option value="已指派">已指派</option>
+                                <option value="已連繫">已連繫</option>
+                                <option value="訂單簽約">訂單簽約</option>
+                                <option value="戰敗">戰敗</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6" style="padding-bottom:30px">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">金流<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cashFlow" name="cashFlow">
+                                <option value="未付款">未付款</option>
+                                <option value="已付訂金">已付訂金</option>
+                                <option value="申請退訂">申請退訂</option>
+                                <option value="已退款">已退款</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-xs-6" style="padding-bottom:20px;display:none" id="returnReasonArea">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">申請退訂原因<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <select class="form-control pull-right" name="returnReason">
+                            <option value="車價不符預期" @if (Model.returnReason == "車價不符預期") { <text> selected</text>}>車價不符預期</option>
+                            <option value="實車不符預期" @if (Model.returnReason == "實車不符預期") { <text> selected</text>}>實車不符預期</option>
+                            <option value="轉讓新車" @if (Model.returnReason == "轉讓新車") { <text> selected</text>}>轉讓新車</option>
+                            <option value="其他" @if (Model.returnReason == "其他") { <text> selected</text>}>其他</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            @*<div>
+                <div class="col-xs-6" style="padding-bottom:30px;display:none" id="returnReasonArea">
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="col-sm-3 control-label">申請退訂原因<span style="color:#a94442;font-size: 18px;">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control pull-right" name="returnReason" disabled>
+                                <option value="預算不足" @if (Model.returnReason == "預算不足") { <text> selected</text>}>預算不足</option>
+                                <option value="其他" @if (Model.returnReason == "其他") { <text> selected</text>}>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">車款註記</label>
+                        <input name="note" class="form-control" value="@Model.note"  />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" style="padding-bottom:20px">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="">正式訂單編號</label>
+                        <input name="formalNo" class="form-control" value="" />
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            if (TempData["UpdateRight"].ToString() == "True")
+            {
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="儲存" name="action" />
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="結案" name="action" />
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="預付保留" name="action" />
+            <input type="submit" class="btn btn-primary" style="padding-left:17px" value="預付保留(退訂)" name="action" />
+            }
+
+            <hr style="border-top:1px solid black" />
+            <table id="buyHistory" class="table table-bordered table-striped" style="margin-bottom:50px">
+                <thead>
+                    <tr>
+                        <th colspan="6">歷程紀錄</th>
+                    </tr>
+                    <tr>
+                        <th>日期</th>
+                        <th>狀態</th>
+                        <th>指定銷售顧問</th>
+                        <th>負責銷售顧問</th>
+                        <th>管理者</th>
+                        <th>備註</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        }
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/AdminLTE/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/Tables/Data")
+    @Scripts.Render("~/AdminLTE/plugins/select2/js")
+    @Scripts.Render("~/AdminLTE/plugins/input-mask/js")
+    @Scripts.Render("~/AdminLTE/plugins/momentjs/js")
+    @Scripts.Render("~/AdminLTE/plugins/daterangepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/colorpicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/timepicker/js")
+    @Scripts.Render("~/AdminLTE/plugins/icheck/js")
+    @Scripts.Render("~/Scripts/Forms/Advanced")
+
+<script>
+
+        $(".sidebar-menu > li").each(function () {
+            var navItem = $(this);
+            if (navItem.find("a").find("span").text() == "我想買車") {
+                navItem.addClass('active');
+            }
+        });
+
+        $(document).ready(function () {
+            $('#visitTime').val('@(Model.visitTime != null)' == 'True' ? '@Model.visitTime.Value.ToString("yyyy-MM-dd")' : '""');
+
+
+            $('#buyHistory')
+            .DataTable({
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                },
+            "processing": true,
+            "serverSide": true,
+            "filter": false,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info":false,
+            "ajax": {
+                "url": "@Url.Action("GetBuyHistory", "CarBuy")",
+                "type": "POST",
+                "data": { "seq": '@Model.seq', "type": '預付保留'}
+            },
+            "columns": [
+                {
+                    "data": "recordDate", "name": "日期", "autoWidth": true, "render": function (data, row) {
+                        return moment(data).format("YYYY/MM/DD").toUpperCase()
+                    }
+                },
+                { "data": "status", "name": "狀態", "autoWidth": true },
+                { "data": "consultant", "name": "指定銷售顧問", "autoWidth": true },
+                { "data": "salesRep", "name": "負責銷售顧問", "autoWidth": true },
+                { "data": "admin", "name": "管理者", "autoWidth": true },
+                { "data": "note", "name": "備註", "autoWidth": true },
+            ]
+            });
+        });
+
+        $('#cashFlow').on("change", function () {
+            var status = this.value;
+            //console.log(status);
+            if (status == '申請退訂' || status == '已退訂') {
+                $('#returnReasonArea').show();
+                if (status == '已退訂') {
+                    $("#status").val("戰敗").change();
+                }
+            }
+            else {
+                $('#returnReasonArea').hide();
+            }
+        });
+</script>
+}
+
+
